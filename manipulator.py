@@ -1,4 +1,4 @@
-# Wrapper used by controllers to manipulate a family of blobs according to the state of the environment
+# wrapper used by controllers to manipulate a family of blobs according to the state of the environment
 class Manipulator:
     def __init__(self, blob_family, model):
         self.blob_family = blob_family

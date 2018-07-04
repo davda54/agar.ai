@@ -1,3 +1,4 @@
+# represents all game entities that can be consumed
 class AbstractItem:
     def __init__(self, position, size):
         self.position = position

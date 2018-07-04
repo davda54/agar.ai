@@ -1,3 +1,4 @@
+# implements the game logic and moves the environment
 class Model:
     def __init__(self):
         pass

@@ -1,6 +1,7 @@
 from abstract_controller import AbstractController
 
-class IOController(AbstractController):
+# controls a blob family according to a mouse movemnt
+class MouseController(AbstractController):
     def __init__(self, manipulator):
         super().__init__(manipulator)
 
