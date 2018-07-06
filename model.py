@@ -1,5 +1,8 @@
 # implements the game logic and moves the environment
 class Model:
+    WIDTH = 1000
+    HEIGHT = 1000
+
     def __init__(self):
         pass
 
@@ -7,7 +10,7 @@ class Model:
         pass
 
     def get_board_size(self):
-        pass
+        return (self.WIDTH, self.HEIGHT)
 
     def get_items(self):
         pass
