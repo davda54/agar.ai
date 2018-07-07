@@ -2,8 +2,8 @@
 # function and  a constructor with manipulator as the first parameter
 
 class AbstractController:
-    def __init__(self, manipulator):
-        self.manipulator = manipulator
-
     def update(self):
         raise NotImplementedError('subclasses must override update()!')
+
+    def set_manipulator(self, manipulator):
+        self.manipulator = manipulator

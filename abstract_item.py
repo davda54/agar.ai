@@ -1,12 +1,12 @@
 # represents all game entities that can be consumed
 class AbstractItem:
-    def __init__(self, position, size):
+    def __init__(self, position, radius):
         self.position = position
-        self.size = size
+        self.radius = radius
 
     def get_position(self): return self.position
 
-    def get_size(self): return self.size
+    def get_radius(self): return self.radius
 
     def collides(self, other):
         pass

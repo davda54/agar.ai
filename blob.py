@@ -1,20 +1,45 @@
+import math
+
+import vector
 from abstract_item import AbstractItem
 
+
 class Blob(AbstractItem):
-    INIT_SIZE = 10
+    INIT_RADIUS = 10
+    BASE_SPEED = 5000
 
     def __init__(self, position):
-        super().__init__(position, self.INIT_SIZE)
-        self.proxy = BlobProxy(self)
+        super().__init__(position, self.INIT_RADIUS)
 
-    def get_weight(self):
-        pass
+        self.__set_weight_from_radius()
+        self.__set_speed_from_weight()
+        self.proxy = BlobProxy(self)
 
     def update(self):
         pass
 
+    def move(self, velocity, dt):
+        self.position = vector.add(self.position, vector.multiply(velocity, dt*self.speed))
+
+    def get_weight(self):
+        return self.weight
+
+    def set_weight(self, weight):
+        self.weight = weight
+        self.__set_radius_from_weight()
+        self.__set_speed_from_weight()
+
     def get_proxy(self):
         return self.proxy
+
+    def __set_radius_from_weight(self):
+        self.radius = math.sqrt(self.weight)
+
+    def __set_weight_from_radius(self):
+        self.weight = self.radius*self.radius
+
+    def __set_speed_from_weight(self):
+        self.speed = self.BASE_SPEED / self.weight
 
 # read-only wrapper around Blob
 class BlobProxy():

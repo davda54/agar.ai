@@ -8,10 +8,11 @@ class BlobFamily():
         self.divide = False
 
     def update(self, dt):
-        pass
+        for blob in self.blobs:
+            blob.move(self.velocity, dt)
 
-    def set_velocity(self, v_x, v_y):
-        self.velocity = (v_x, v_y)
+    def set_velocity(self, v):
+        self.velocity = v
 
     def shoot(self):
         self.shoot = True

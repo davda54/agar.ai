@@ -1,8 +1,9 @@
+import vector
 from abstract_controller import AbstractController
 
 class BasicAIController(AbstractController):
-    def __init__(self, manipulator):
-        super().__init__(manipulator)
-
     def update(self):
-        pass
+        position = self.manipulator.get_blob_family_positions_and_weights()[0][0]
+        middle = vector.divide(self.manipulator.get_board_size(), 2)
+
+        self.manipulator.set_velocity(vector.substract(middle, position))
