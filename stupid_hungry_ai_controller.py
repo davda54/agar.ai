@@ -2,7 +2,7 @@ import vector
 from abstract_controller import AbstractController
 
 # AI that hunts the closest thing
-class HungryAIController(AbstractController):
+class StupidHungryAIController(AbstractController):
     def update(self):
         position = self.manipulator.get_blob_family_positions_and_weights()[0][0]
 

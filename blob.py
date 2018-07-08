@@ -25,6 +25,9 @@ class Blob(AbstractItem):
     def get_weight(self):
         return self.weight
 
+    def add_weight(self, weight):
+        self.set_weight(self.weight + weight)
+
     def set_weight(self, weight):
         self.weight = weight
         self.radius = self.__get_radius_from_weight()

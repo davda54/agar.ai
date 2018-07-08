@@ -30,8 +30,11 @@ class View:
         self.__draw_circle(blob.get_position(), blob.get_radius(), color)
 
     def __draw_pellet(self, pellet):
-        shade = 64 + pellet.get_bonus_weight()*32
-        self.__draw_circle(pellet.get_position(), 2, (shade,shade,shade))
+        if pellet.get_bonus_weight() == Pellet.LARGE_PELLET_WEIGHT:
+            self.__draw_circle(pellet.get_position(), 20, (128, 128, 128))
+        else:
+            shade = 96 + pellet.get_bonus_weight()*16
+            self.__draw_circle(pellet.get_position(), 2, (shade,shade,shade))
 
     # draw circle in the board coordinates onto the screen coordinates
     def __draw_circle(self, pos, r, col):

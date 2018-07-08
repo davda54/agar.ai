@@ -13,10 +13,13 @@ class Model:
     WIDTH = 1000
     HEIGHT = 1000
     NUM_OF_PELLETS = 100
+    NUM_OF_LARGE_PELLETS = 2
 
     def __init__(self):
         self.pellets = DoubleLinkedList()
         for _ in range(self.NUM_OF_PELLETS): self.__generate_pellet()
+
+        for _ in range(self.NUM_OF_LARGE_PELLETS): self.__generate_large_pellet()
 
         self.blob_families = []
         self.blobs = DoubleLinkedList()
@@ -65,17 +68,35 @@ class Model:
             while pellet is not None:
                 if blob_a.get().collides(pellet.get()):
                     pellet.get().affect(blob_a.get())
+
+                    if pellet.get().get_bonus_weight() == Pellet.LARGE_PELLET_WEIGHT: self.__generate_large_pellet()
+                    else: self.__generate_pellet()
+
                     tmp = pellet.get_next()
                     self.pellets.delete(pellet)
-                    self.__generate_pellet()
                     pellet = tmp
+
                 else:
                     pellet = pellet.get_next()
 
             blob_b = blob_a.get_next()
             while blob_b is not None:
                 if blob_b.get().player_id != blob_b.get().player_id and blob_a.get().collides(blob_b.get()):
-                    blob_b = blob_b.get_next()
+
+                    if blob_a.get().get_weight()*0.85 > blob_b.get().get_weight():
+                        #TODO: delete from family
+                        blob_a.get().add_weight(blob_b.get().get_weight())
+                        tmp = blob_b.get_next()
+                        self.blobs.delete(blob_b)
+                        blob_b = tmp
+                    elif blob_b.get().get_weight() * 0.85 > blob_a.get().get_weight():
+                        blob_b.get().add_weight(blob_a.get().get_weight())
+                        tmp = blob_a.get_next()
+                        self.blobs.delete(blob_a)
+                        blob_a = tmp
+                        break
+                    else:
+                        blob_b = blob_b.get_next()
                 else:
                     blob_b = blob_b.get_next()
 
@@ -88,6 +109,6 @@ class Model:
         self.pellets.append(pellet)
 
     # dont generate on active cell
-    def __generato_large_pellet(self):
-        pellet = Pellet(self.__random_position(5), 100)
+    def __generate_large_pellet(self):
+        pellet = Pellet(self.__random_position(5), Pellet.LARGE_PELLET_WEIGHT)
         self.pellets.append(pellet)

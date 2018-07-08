@@ -1,18 +1,17 @@
 import pygame
 
-from hungry_ai_controller import HungryAIController
-from middle_ai_controller import MiddleAIController
 from model import Model
+from stupid_hungry_ai_controller import StupidHungryAIController
 from view import View
 
 
 def run():
     model = Model()
-    model.register_controller(MiddleAIController())
-    model.register_controller(HungryAIController())
-    model.register_controller(HungryAIController())
-    model.register_controller(HungryAIController())
-    model.register_controller(HungryAIController())
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
 
 
     pygame.init()
