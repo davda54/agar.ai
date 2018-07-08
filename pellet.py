@@ -1,19 +1,14 @@
-import math
-
 from abstract_bonus_item import AbstractBonusItem
 
-
-class WeightBonusItem(AbstractBonusItem):
-    SMALL_BONUS_WEIGHT = 10
-    LARGE_BONUS_WEIGHT = 200
+class Pellet(AbstractBonusItem):
 
     def __init__(self, position, weight):
-        super().__init__(position, math.sqrt(weight))
+        super().__init__(position, 1)
         self.weight = weight
-        self.proxy = WeightBonusItemProxy(self)
+        self.proxy = PelletProxy(self)
 
     def affect(self, blob):
-        blob.set_weight(blob.get_weight() + 25*self.weight)
+        blob.set_weight(blob.get_weight() + self.weight)
 
     def get_bonus_weight(self):
         return self.weight
@@ -23,7 +18,7 @@ class WeightBonusItem(AbstractBonusItem):
 
 
 # read-only wrapper around WeightBonusItem
-class WeightBonusItemProxy():
+class PelletProxy():
     def __init__(self, item):
         self.__item = item
 

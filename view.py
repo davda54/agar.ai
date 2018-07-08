@@ -2,7 +2,7 @@ import pygame
 from pygame import gfxdraw
 
 from blob import Blob
-from weight_bonus_item import WeightBonusItem
+from pellet import Pellet
 
 
 # renders the environment
@@ -21,7 +21,7 @@ class View:
 
         for item in self.model.get_items():
             if isinstance(item, Blob): self.__draw_blob(item)
-            elif isinstance(item, WeightBonusItem): self.__draw_pellet(item)
+            elif isinstance(item, Pellet): self.__draw_pellet(item)
 
         self.screen.unlock()
 
@@ -30,7 +30,8 @@ class View:
         self.__draw_circle(blob.get_position(), blob.get_radius(), color)
 
     def __draw_pellet(self, pellet):
-        self.__draw_circle(pellet.get_position(), pellet.get_radius(), (128,128,128))
+        shade = 64 + pellet.get_bonus_weight()*32
+        self.__draw_circle(pellet.get_position(), 2, (shade,shade,shade))
 
     # draw circle in the board coordinates onto the screen coordinates
     def __draw_circle(self, pos, r, col):

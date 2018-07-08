@@ -5,15 +5,15 @@ from abstract_item import AbstractItem
 
 
 class Blob(AbstractItem):
-    INIT_RADIUS = 20
-    BASE_SPEED = 50000
+    INIT_WEIGHT = 20
+    BASE_SPEED = 100
 
     def __init__(self, position, player_id):
-        super().__init__(position, self.INIT_RADIUS)
+        self.weight = self.INIT_WEIGHT
+        super().__init__(position, self.__get_radius_from_weight())
 
         self.player_id = player_id
-        self.__set_weight_from_radius()
-        self.__set_speed_from_weight()
+        self.speed = self.__get_speed_from_radius()
         self.proxy = BlobProxy(self)
 
     def update(self):
@@ -27,8 +27,8 @@ class Blob(AbstractItem):
 
     def set_weight(self, weight):
         self.weight = weight
-        self.__set_radius_from_weight()
-        self.__set_speed_from_weight()
+        self.radius = self.__get_radius_from_weight()
+        self.speed = self.__get_speed_from_radius()
 
     def get_proxy(self):
         return self.proxy
@@ -36,14 +36,14 @@ class Blob(AbstractItem):
     def get_player_id(self):
         return self.player_id
 
-    def __set_radius_from_weight(self):
-        self.radius = math.sqrt(self.weight)
+    def __get_radius_from_weight(self):
+        return math.sqrt(self.weight*10)
 
-    def __set_weight_from_radius(self):
-        self.weight = self.radius*self.radius
+    def __get_weight_from_radius(self):
+        return self.radius*self.radius / 10
 
-    def __set_speed_from_weight(self):
-        self.speed = self.BASE_SPEED / self.weight
+    def __get_speed_from_radius(self):
+        return self.BASE_SPEED*2.2*(self.radius**-0.439)
 
 # read-only wrapper around Blob
 class BlobProxy():

@@ -5,7 +5,7 @@ from blob import Blob
 from blob_family import BlobFamily
 from double_linked_list import DoubleLinkedList
 from manipulator import Manipulator
-from weight_bonus_item import WeightBonusItem
+from pellet import Pellet
 
 
 # implements the game logic and moves the environment
@@ -81,6 +81,13 @@ class Model:
 
             blob_a = blob_a.get_next()
 
+    # dont generate on active cell
     def __generate_pellet(self):
-        pellet = WeightBonusItem(self.__random_position(5), 5)
+        weight = random.randint(1, 5)
+        pellet = Pellet(self.__random_position(5), weight)
+        self.pellets.append(pellet)
+
+    # dont generate on active cell
+    def __generato_large_pellet(self):
+        pellet = Pellet(self.__random_position(5), 100)
         self.pellets.append(pellet)
