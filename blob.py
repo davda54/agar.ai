@@ -5,12 +5,13 @@ from abstract_item import AbstractItem
 
 
 class Blob(AbstractItem):
-    INIT_RADIUS = 10
-    BASE_SPEED = 5000
+    INIT_RADIUS = 20
+    BASE_SPEED = 50000
 
-    def __init__(self, position):
+    def __init__(self, position, player_id):
         super().__init__(position, self.INIT_RADIUS)
 
+        self.player_id = player_id
         self.__set_weight_from_radius()
         self.__set_speed_from_weight()
         self.proxy = BlobProxy(self)

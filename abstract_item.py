@@ -1,3 +1,5 @@
+import vector
+
 # represents all game entities that can be consumed
 class AbstractItem:
     def __init__(self, position, radius):
@@ -9,7 +11,10 @@ class AbstractItem:
     def get_radius(self): return self.radius
 
     def collides(self, other):
-        pass
+        distance = vector.squared_norm(vector.substract(self.position, other.position))
+        if distance - (self.radius + (1 - 2.0/3.0)*other.radius)**2 < 0: return True
+        else: return distance - ((1 - 2.0/3.0)*self.radius + other.radius)**2 < 0
+
 
     def get_proxy(self):
         raise NotImplementedError('subclasses must override get_proxy()!')

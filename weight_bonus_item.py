@@ -13,7 +13,7 @@ class WeightBonusItem(AbstractBonusItem):
         self.proxy = WeightBonusItemProxy(self)
 
     def affect(self, blob):
-        blob.set_weight(blob.get_weight() + self.weight)
+        blob.set_weight(blob.get_weight() + 25*self.weight)
 
     def get_bonus_weight(self):
         return self.weight
