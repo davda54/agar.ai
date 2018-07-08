@@ -1,5 +1,11 @@
 import math
 
+def distance(a, b):
+    return norm(substract(a, b))
+
+def squared_distance(a, b):
+    return squared_norm(substract(a, b))
+
 def norm(vec):
     return math.sqrt(vec[0]*vec[0] + vec[1]*vec[1])
 

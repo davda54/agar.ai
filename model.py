@@ -12,7 +12,7 @@ from pellet import Pellet
 class Model:
     WIDTH = 1000
     HEIGHT = 1000
-    NUM_OF_PELLETS = 500
+    NUM_OF_PELLETS = 100
 
     def __init__(self):
         self.pellets = DoubleLinkedList()

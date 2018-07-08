@@ -37,10 +37,10 @@ class Blob(AbstractItem):
         return self.player_id
 
     def __get_radius_from_weight(self):
-        return math.sqrt(self.weight*10)
+        return math.sqrt(self.weight*5)
 
     def __get_weight_from_radius(self):
-        return self.radius*self.radius / 10
+        return self.radius*self.radius / 5
 
     def __get_speed_from_radius(self):
         return self.BASE_SPEED*2.2*(self.radius**-0.439)
