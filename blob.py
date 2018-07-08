@@ -33,6 +33,9 @@ class Blob(AbstractItem):
     def get_proxy(self):
         return self.proxy
 
+    def get_player_id(self):
+        return self.player_id
+
     def __set_radius_from_weight(self):
         self.radius = math.sqrt(self.weight)
 

@@ -15,7 +15,9 @@ class Model:
     NUM_OF_PELLETS = 500
 
     def __init__(self):
-        self.pellets = DoubleLinkedList([WeightBonusItem(self.__random_position(5), 5) for _ in range(self.NUM_OF_PELLETS)])
+        self.pellets = DoubleLinkedList()
+        for _ in range(self.NUM_OF_PELLETS): self.__generate_pellet()
+
         self.blob_families = []
         self.blobs = DoubleLinkedList()
         self.controllers = []
@@ -65,6 +67,7 @@ class Model:
                     pellet.get().affect(blob_a.get())
                     tmp = pellet.get_next()
                     self.pellets.delete(pellet)
+                    self.__generate_pellet()
                     pellet = tmp
                 else:
                     pellet = pellet.get_next()
@@ -78,4 +81,6 @@ class Model:
 
             blob_a = blob_a.get_next()
 
-
+    def __generate_pellet(self):
+        pellet = WeightBonusItem(self.__random_position(5), 5)
+        self.pellets.append(pellet)

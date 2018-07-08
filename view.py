@@ -17,7 +17,7 @@ class View:
         self.screen.lock()
 
         self.screen.fill((0,0,0))
-        self.__draw_rect((0,0), self.model.get_board_size(), (255,255,255))
+        self.__draw_rect((0,0), self.model.get_board_size(), (128,128,128))
 
         for item in self.model.get_items():
             if isinstance(item, Blob): self.__draw_blob(item)
@@ -26,10 +26,11 @@ class View:
         self.screen.unlock()
 
     def __draw_blob(self, blob):
-        self.__draw_circle(blob.get_position(), blob.get_radius(), (255,0,0))
+        color = self.__get_unique_color(blob.get_player_id())
+        self.__draw_circle(blob.get_position(), blob.get_radius(), color)
 
     def __draw_pellet(self, pellet):
-        self.__draw_circle(pellet.get_position(), pellet.get_radius(), (0,255,0))
+        self.__draw_circle(pellet.get_position(), pellet.get_radius(), (128,128,128))
 
     # draw circle in the board coordinates onto the screen coordinates
     def __draw_circle(self, pos, r, col):
@@ -70,3 +71,11 @@ class View:
         else:
             self.resize_ratio = height_ratio
             self.resize_offset = ((screen_size[0] - board_size[0]*self.resize_ratio) * 0.5, 0)
+
+    # uses golden angle to return the most distant hues for different consecutive ns
+    def __get_unique_color(self, n):
+        hue = n*137.5077640500378546463487
+
+        color = pygame.Color(0,0,0,0)
+        color.hsva = (hue % 360.0, 100, 100, 100)
+        return color
