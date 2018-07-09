@@ -21,8 +21,8 @@ class CowardHungryAIController(AbstractController):
                 value = item.get_bonus_weight()**2 / distance
                 run_away = False
             elif isinstance(item, BlobProxy):
-                if item.get_weight()*0.85 > blob.get_weight():
-                    value = item.get_weight()**3 / distance
+                if item.get_weight()*0.9 > blob.get_weight():
+                    value = item.get_weight()**2 / distance
                     run_away = True
                 elif blob.get_weight()*0.85 > item.get_weight():
                     value = item.get_weight()**2 / distance

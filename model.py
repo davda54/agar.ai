@@ -12,7 +12,7 @@ from pellet import Pellet
 class Model:
     WIDTH = 2500
     HEIGHT = 2500
-    NUM_OF_PELLETS = 500
+    NUM_OF_PELLETS = 200
     NUM_OF_LARGE_PELLETS = 5
 
     def __init__(self):

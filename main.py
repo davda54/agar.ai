@@ -13,6 +13,12 @@ def run():
     model = Model()
     #model.register_controller(MouseController(screen.get_size(), 48))
     model.register_controller(CowardHungryAIController())
+    model.register_controller(CowardHungryAIController())
+
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
+    model.register_controller(StupidHungryAIController())
     model.register_controller(StupidHungryAIController())
     model.register_controller(StupidHungryAIController())
     model.register_controller(StupidHungryAIController())

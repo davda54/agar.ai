@@ -2,6 +2,9 @@ import vector
 from abstract_controller import AbstractController
 
 # AI that hunts the closest thing
+from pellet import PelletProxy
+
+
 class StupidHungryAIController(AbstractController):
     def update(self):
         position = self.manipulator.get_blob_family_positions_and_weights()[0][0]
@@ -10,9 +13,10 @@ class StupidHungryAIController(AbstractController):
         closest = None
 
         for item in others:
-            distance = vector.squared_distance(position, item.get_position())
-            if closest is None or distance < closest[1]:
-                closest = (item.get_position(), distance)
+            if isinstance(item, PelletProxy):
+                distance = vector.squared_distance(position, item.get_position())
+                if closest is None or distance < closest[1]:
+                    closest = (item.get_position(), distance)
 
         if closest is None:
             position = self.manipulator.get_blob_family_positions_and_weights()[0][0]
