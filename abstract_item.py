@@ -15,5 +15,9 @@ class AbstractItem:
         if distance - (self.radius + (1 - 4.0/3.0)*other.radius)**2 < 0: return True
         else: return distance - ((1 - 4.0/3.0)*self.radius + other.radius)**2 < 0
 
+    def touches(self, other):
+        distance = vector.squared_norm(vector.substract(self.position, other.position))
+        return distance - (self.radius + other.radius)**2 < 0
+
     def get_proxy(self):
         raise NotImplementedError('subclasses must override get_proxy()!')

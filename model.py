@@ -81,23 +81,28 @@ class Model:
 
             blob_b = blob_a.get_next()
             while blob_b is not None:
-                if blob_a.get().player_id != blob_b.get().player_id and blob_a.get().collides(blob_b.get()):
-
-                    if blob_a.get().get_weight()*0.85 > blob_b.get().get_weight():
-                        #TODO: delete from family
-                        blob_a.get().add_weight(blob_b.get().get_weight())
-                        tmp = blob_b.get_next()
-                        self.blobs.delete(blob_b)
-                        blob_b = tmp
-                    elif blob_b.get().get_weight() * 0.85 > blob_a.get().get_weight():
-                        blob_b.get().add_weight(blob_a.get().get_weight())
-                        tmp = blob_a.get_next()
-                        self.blobs.delete(blob_a)
-                        blob_a = tmp
-                        break
+                if blob_a.get().player_id != blob_b.get().player_id:
+                    if blob_a.get().collides(blob_b.get()):
+                        if blob_a.get().get_weight()*0.85 > blob_b.get().get_weight():
+                            #TODO: delete from family
+                            blob_a.get().add_weight(blob_b.get().get_weight())
+                            tmp = blob_b.get_next()
+                            self.blobs.delete(blob_b)
+                            blob_b = tmp
+                        elif blob_b.get().get_weight() * 0.85 > blob_a.get().get_weight():
+                            blob_b.get().add_weight(blob_a.get().get_weight())
+                            tmp = blob_a.get_next()
+                            self.blobs.delete(blob_a)
+                            blob_a = tmp
+                            break
+                        else:
+                            blob_b = blob_b.get_next()
                     else:
                         blob_b = blob_b.get_next()
+
                 else:
+                    if blob_a.get().touches(blob_b.get()):
+                        blob_a.get().repel_from_each_other(blob_b.get())
                     blob_b = blob_b.get_next()
 
             blob_a = blob_a.get_next()
