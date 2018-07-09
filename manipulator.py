@@ -20,10 +20,16 @@ class Manipulator:
 
     def get_other_items(self):
         blobs_in_family = self.blob_family.get_blobs()
-        return [i.get_proxy() for i in self.model.get_items() if i not in blobs_in_family]
+        position = self.blob_family.get_average_position()
+        radius = self.blob_family.get_total_cell_radius()
+
+        return [i.get_proxy() for i in self.model.get_items() if i not in blobs_in_family and vector.squared_distance(position, i.get_position()) < (13*radius)**2]
 
     def get_blob_family_positions_and_weights(self):
         return [(b.get_position(), b.get_weight()) for b in self.blob_family.get_blobs()]
+
+    def get_largest_blob(self):
+        return self.blob_family.get_largest_blob()
 
     def get_board_size(self):
         return self.model.get_board_size()

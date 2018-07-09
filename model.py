@@ -48,7 +48,7 @@ class Model:
 
     def register_controller(self, controller):
         blob = Blob(self.__random_position(50), self.num_players)
-        blob_family = BlobFamily(blob, self.num_players)
+        blob_family = BlobFamily(self, blob, self.num_players)
         controller.set_manipulator(Manipulator(blob_family, self))
 
         self.num_players += 1
@@ -110,5 +110,5 @@ class Model:
 
     # dont generate on active cell
     def __generate_large_pellet(self):
-        pellet = Pellet(self.__random_position(5), Pellet.LARGE_PELLET_WEIGHT, 22)
+        pellet = Pellet(self.__random_position(50), Pellet.LARGE_PELLET_WEIGHT, 22)
         self.pellets.append(pellet)

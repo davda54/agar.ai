@@ -22,6 +22,17 @@ class Blob(AbstractItem):
     def move(self, velocity, dt):
         self.position = vector.add(self.position, vector.multiply(velocity, dt*self.speed))
 
+    def bounce_from_boundaries(self, board_size):
+        if self.position[0] < self.radius: x = self.radius
+        elif self.position[0] > board_size[0] - self.radius: x = board_size[0] - self.radius
+        else: x = self.position[0]
+
+        if self.position[1] < self.radius: y = self.radius
+        elif self.position[1] > board_size[1] - self.radius: y = board_size[1] - self.radius
+        else: y = self.position[1]
+
+        self.position = (x, y)
+
     def get_weight(self):
         return self.weight
 

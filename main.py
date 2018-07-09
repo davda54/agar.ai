@@ -1,8 +1,8 @@
 import pygame
 
+from coward_hungry_ai_controller import CowardHungryAIController
+from gameboard_view import GameboardView
 from model import Model
-from mouse_controller import MouseController
-from player_view import PlayerView
 from stupid_hungry_ai_controller import StupidHungryAIController
 
 
@@ -11,14 +11,15 @@ def run():
     screen = pygame.display.set_mode((1280, 720))
 
     model = Model()
-    model.register_controller(MouseController(screen.get_size(), 48))
+    #model.register_controller(MouseController(screen.get_size(), 48))
+    model.register_controller(CowardHungryAIController())
     model.register_controller(StupidHungryAIController())
     model.register_controller(StupidHungryAIController())
     model.register_controller(StupidHungryAIController())
     model.register_controller(StupidHungryAIController())
 
-    #view = GameboardView(screen, model)
-    view = PlayerView(screen, model, model.blob_families[0], 48)
+    view = GameboardView(screen, model)
+    #view = PlayerView(screen, model, model.blob_families[0], 48)
 
     done = False
 
