@@ -4,8 +4,8 @@ class Pellet(AbstractBonusItem):
 
     LARGE_PELLET_WEIGHT = 100
 
-    def __init__(self, position, weight):
-        super().__init__(position, 1)
+    def __init__(self, position, weight, radius):
+        super().__init__(position, radius)
         self.weight = weight
         self.proxy = PelletProxy(self)
 

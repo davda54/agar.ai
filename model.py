@@ -10,10 +10,10 @@ from pellet import Pellet
 
 # implements the game logic and moves the environment
 class Model:
-    WIDTH = 1000
-    HEIGHT = 1000
-    NUM_OF_PELLETS = 100
-    NUM_OF_LARGE_PELLETS = 2
+    WIDTH = 2500
+    HEIGHT = 2500
+    NUM_OF_PELLETS = 500
+    NUM_OF_LARGE_PELLETS = 5
 
     def __init__(self):
         self.pellets = DoubleLinkedList()
@@ -81,7 +81,7 @@ class Model:
 
             blob_b = blob_a.get_next()
             while blob_b is not None:
-                if blob_b.get().player_id != blob_b.get().player_id and blob_a.get().collides(blob_b.get()):
+                if blob_a.get().player_id != blob_b.get().player_id and blob_a.get().collides(blob_b.get()):
 
                     if blob_a.get().get_weight()*0.85 > blob_b.get().get_weight():
                         #TODO: delete from family
@@ -105,10 +105,10 @@ class Model:
     # dont generate on active cell
     def __generate_pellet(self):
         weight = random.randint(1, 5)
-        pellet = Pellet(self.__random_position(5), weight)
+        pellet = Pellet(self.__random_position(5), weight, 5)
         self.pellets.append(pellet)
 
     # dont generate on active cell
     def __generate_large_pellet(self):
-        pellet = Pellet(self.__random_position(5), Pellet.LARGE_PELLET_WEIGHT)
+        pellet = Pellet(self.__random_position(5), Pellet.LARGE_PELLET_WEIGHT, 22)
         self.pellets.append(pellet)

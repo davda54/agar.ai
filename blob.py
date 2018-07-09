@@ -6,7 +6,7 @@ from abstract_item import AbstractItem
 
 class Blob(AbstractItem):
     INIT_WEIGHT = 20
-    BASE_SPEED = 100
+    BASE_SPEED = 200
 
     def __init__(self, position, player_id):
         self.weight = self.INIT_WEIGHT

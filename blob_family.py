@@ -1,3 +1,8 @@
+from functools import reduce
+
+import vector
+
+
 # contains all blobs that makes up a player and manipulates them
 class BlobFamily():
     def __init__(self, blob, player_id):
@@ -24,3 +29,9 @@ class BlobFamily():
     def get_blobs(self):
         return self.blobs
 
+    def get_average_position(self):
+        sum = reduce(lambda x, y: vector.add(x, y), [blob.get_position() for blob in self.blobs])
+        return vector.divide(sum, len(self.blobs))
+
+    def get_total_cell_radius(self):
+        return sum([blob.get_radius() for blob in self.blobs])
