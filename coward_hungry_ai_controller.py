@@ -1,7 +1,8 @@
 import vector
+from abstract_blob import BlobProxy
 from abstract_controller import AbstractController
-from blob import BlobProxy
 from pellet import PelletProxy
+
 
 # AI that hunts the closest thing
 

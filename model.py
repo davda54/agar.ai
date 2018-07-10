@@ -23,9 +23,9 @@ class Model:
 
         self.blob_families = []
         self.blobs = DoubleLinkedList()
+        self.bullet_blobs = DoubleLinkedList()
         self.controllers = []
         self.lastime = time.time()
-        self.num_players = 0
 
     def update(self):
         currentTime = time.time()
@@ -38,29 +38,35 @@ class Model:
         for family in self.blob_families:
             family.update(dt)
 
+        for bullet_blob in self.bullet_blobs:
+            bullet_blob.get().update(dt)
+
         self.__resolve_collisions()
 
     def get_board_size(self):
         return (self.WIDTH, self.HEIGHT)
 
     def get_items(self):
-        return [pellet.get() for pellet in self.pellets] + [blob.get() for blob in self.blobs]
+        return [pellet.get() for pellet in self.pellets] + [bullet_blob.get() for bullet_blob in self.bullet_blobs] + [blob.get() for blob in self.blobs]
 
     def register_controller(self, controller):
-        blob_family = BlobFamily(self, self.num_players)
-        blob = Blob(self.__random_position(50), self.num_players, blob_family)
+        blob_family = BlobFamily(self, len(self.controllers))
+        blob = Blob(self, self.__random_position(50), len(self.controllers), blob_family)
         blob_family.add_blob(blob)
         controller.set_manipulator(Manipulator(blob_family, self))
-
-        self.num_players += 1
 
         self.controllers.append(controller)
         self.blobs.append(blob)
         self.blob_families.append(blob_family)
 
+    def add_blob(self, blob):
+        self.blobs.append(blob)
+
+    def add_bullet_blob(self, bullet_blob):
+        self.bullet_blobs.append(bullet_blob)
+
     def __random_position(self, offset):
         return (random.randint(offset, self.WIDTH - offset), random.randint(offset, self.HEIGHT - offset))
-
 
     #TODO: What the actual fuck? Have to simplify this!
     def __resolve_collisions(self):

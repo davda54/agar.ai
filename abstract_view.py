@@ -2,7 +2,7 @@ import pygame
 from pygame import gfxdraw
 
 import vector
-from blob import Blob
+from abstract_blob import AbstractBlob
 from pellet import Pellet
 
 
@@ -18,7 +18,7 @@ class AbstractView:
         self._draw_rect((0,0), self.model.get_board_size(), (128,128,128))
 
         for item in self.model.get_items():
-            if isinstance(item, Blob): self._draw_blob(item)
+            if isinstance(item, AbstractBlob): self._draw_blob(item)
             elif isinstance(item, Pellet): self._draw_pellet(item)
 
         self.screen.unlock()

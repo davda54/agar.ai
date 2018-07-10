@@ -24,5 +24,5 @@ class MouseController(AbstractController):
 
         for event in self.model.events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.manipulator.divide()
-        #elif pressed[1]: self.manipulator.shoot()
+                if event.button == 1: self.manipulator.divide()
+                elif event.button == 3: self.manipulator.shoot()
