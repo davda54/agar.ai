@@ -38,7 +38,7 @@ class Blob(AbstractItem):
         self.force = vector.add(self.force, (x, y))
 
     def get_together(self, center):
-        difference = vector.multiply(vector.substract(center, self.position), 0.02)
+        difference = vector.multiply(vector.substract(center, self.position), 0.015)
         self.force = vector.add(self.force, difference)
 
     def repel_from_each_other(self, blob):
@@ -73,6 +73,9 @@ class Blob(AbstractItem):
 
     def get_player_id(self):
         return self.player_id
+
+    def get_blob_family(self):
+        return self.blob_family
 
     def remove_from_family(self):
         self.blob_family.remove(self)

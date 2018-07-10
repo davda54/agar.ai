@@ -61,6 +61,8 @@ class Model:
     def __random_position(self, offset):
         return (random.randint(offset, self.WIDTH - offset), random.randint(offset, self.HEIGHT - offset))
 
+
+    #TODO: What the actual fuck? Have to simplify this!
     def __resolve_collisions(self):
         blob_a = self.blobs.get_first_iterator()
         while blob_a is not None:
@@ -85,7 +87,6 @@ class Model:
                 if blob_a.get().player_id != blob_b.get().player_id:
                     if blob_a.get().collides(blob_b.get()):
                         if blob_a.get().get_weight()*0.85 > blob_b.get().get_weight():
-                            #TODO: delete from family
                             blob_a.get().add_weight(blob_b.get().get_weight())
                             tmp = blob_b.get_next()
                             self.blobs.delete(blob_b)
@@ -105,9 +106,27 @@ class Model:
                         blob_b = blob_b.get_next()
 
                 else:
-                    if blob_a.get().touches(blob_b.get()):
-                        blob_a.get().repel_from_each_other(blob_b.get())
-                    blob_b = blob_b.get_next()
+                    if blob_a.get().get_blob_family().should_stay_divided():
+                        if blob_a.get().touches(blob_b.get()):
+                            blob_a.get().repel_from_each_other(blob_b.get())
+                        blob_b = blob_b.get_next()
+
+                    elif blob_a.get().collides(blob_b.get()):
+                        if blob_a.get().get_weight() >= blob_b.get().get_weight():
+                            blob_a.get().add_weight(blob_b.get().get_weight())
+                            tmp = blob_b.get_next()
+                            self.blobs.delete(blob_b)
+                            blob_b.get().remove_from_family()
+                            blob_b = tmp
+                        else:
+                            blob_b.get().add_weight(blob_a.get().get_weight())
+                            tmp = blob_a.get_next()
+                            self.blobs.delete(blob_a)
+                            blob_a.get().remove_from_family()
+                            blob_a = tmp
+                            break
+                    else:
+                        blob_b = blob_b.get_next()
 
             blob_a = blob_a.get_next()
 

@@ -15,12 +15,16 @@ class BlobFamily():
         self.velocity = (0,0)
         self.shoot_now = False
         self.divide_now = False
+        self.divide_countdown = 0
 
     def update(self, dt):
         if not self.is_alive(): return
 
         if self.divide_now:
             self.__divide()
+
+        if self.should_stay_divided():
+            self.divide_countdown -= dt
 
         center = self.get_average_position()
 
@@ -51,6 +55,7 @@ class BlobFamily():
             self.select_main_blob()
 
     def __divide(self):
+        has_divided = False
         for blob in self.blobs[:]:
             if blob.get_weight() >= 32 and len(self.blobs) < 16:
                 blob.set_weight(int(blob.get_weight() / 2))
@@ -59,10 +64,17 @@ class BlobFamily():
                 new_blob.set_weight(blob.get_weight())
                 self.blobs.append(new_blob)
                 self.model.blobs.append(new_blob)
-                new_blob.force = vector.multiply(vector.normalize(self.velocity), 150)
+                new_blob.force = vector.multiply(vector.normalize(self.velocity), 200)
+
+                has_divided = True
+
+        if has_divided: self.divide_countdown = max(20, self.get_total_cell_radius() * 0.2)
 
     def divide(self):
         self.divide_now = True
+
+    def should_stay_divided(self):
+        return self.divide_countdown > 0
 
     def get_blobs(self):
         return self.blobs

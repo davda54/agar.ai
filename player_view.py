@@ -1,3 +1,5 @@
+import math
+
 import vector
 from abstract_view import AbstractView
 from gameboard_view import GameboardView
@@ -28,11 +30,11 @@ class PlayerView(AbstractView):
         return self.resize_offset
 
     def __set_resize_ratio(self):
-        self.resize_ratio = self.player_radius/self.center_blob_family.get_total_cell_radius()
+        self.resize_ratio = self.player_radius/max(20, 7*math.pow(self.center_blob_family.get_total_cell_radius(), 0.4))
 
     def __set_resize_offset(self):
         screen_center = vector.divide(self.screen.get_size(), 2)
-        scale_position = vector.multiply(self.center_blob_family.get_average_position(), self._get_resize_ratio())
+        scale_position = vector.multiply(self.center_blob_family.get_largest_blob().get_position(), self._get_resize_ratio())
         self.resize_offset = vector.substract(screen_center, scale_position)
 
     def _fits_on_screen(self, item):
