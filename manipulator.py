@@ -33,3 +33,6 @@ class Manipulator:
 
     def get_board_size(self):
         return self.model.get_board_size()
+
+    def is_alive(self):
+        return self.blob_family.is_alive()

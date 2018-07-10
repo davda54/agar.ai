@@ -47,8 +47,9 @@ class Model:
         return [pellet.get() for pellet in self.pellets] + [blob.get() for blob in self.blobs]
 
     def register_controller(self, controller):
-        blob = Blob(self.__random_position(50), self.num_players)
-        blob_family = BlobFamily(self, blob, self.num_players)
+        blob_family = BlobFamily(self, self.num_players)
+        blob = Blob(self.__random_position(50), self.num_players, blob_family)
+        blob_family.add_blob(blob)
         controller.set_manipulator(Manipulator(blob_family, self))
 
         self.num_players += 1
@@ -88,11 +89,14 @@ class Model:
                             blob_a.get().add_weight(blob_b.get().get_weight())
                             tmp = blob_b.get_next()
                             self.blobs.delete(blob_b)
+                            blob_b.get().remove_from_family()
                             blob_b = tmp
+
                         elif blob_b.get().get_weight() * 0.85 > blob_a.get().get_weight():
                             blob_b.get().add_weight(blob_a.get().get_weight())
                             tmp = blob_a.get_next()
                             self.blobs.delete(blob_a)
+                            blob_a.get().remove_from_family()
                             blob_a = tmp
                             break
                         else:

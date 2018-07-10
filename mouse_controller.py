@@ -13,6 +13,8 @@ class MouseController(AbstractController):
         self.model = model
 
     def update(self):
+        if not self.manipulator.is_alive(): return
+
         mouse_position = pygame.mouse.get_pos()
         direction = vector.substract(mouse_position, self.view_center)
         direction = vector.divide(direction, self.player_radius)

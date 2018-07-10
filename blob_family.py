@@ -1,3 +1,4 @@
+import math
 from functools import reduce
 
 import vector
@@ -6,16 +7,18 @@ from blob import Blob
 
 # contains all blobs that makes up a player and manipulates them
 class BlobFamily():
-    def __init__(self, model, blob, player_id):
+    def __init__(self, model, player_id):
         self.model = model
-        self.blobs = [blob] # better use some heap to quickly get the largest blob
-        self.main_blob = blob
+        self.blobs = [] # better use some heap to quickly get the largest blob
+        self.main_blob = None
         self.player_id = player_id
         self.velocity = (0,0)
         self.shoot_now = False
         self.divide_now = False
 
     def update(self, dt):
+        if not self.is_alive(): return
+
         if self.divide_now:
             self.__divide()
 
@@ -34,14 +37,29 @@ class BlobFamily():
     def shoot(self):
         self.shoot_now = True
 
+    def add_blob(self, blob):
+        self.blobs.append(blob)
+        self.select_main_blob()
+
+    def select_main_blob(self):
+        if len(self.blobs) == 0: self.main_blob = None
+        else: self.main_blob = max(self.blobs, key=lambda blob: blob.get_weight())
+
+    def remove(self, blob):
+        self.blobs.remove(blob)
+        if blob is self.main_blob:
+            self.select_main_blob()
+
     def __divide(self):
-        if self.main_blob.get_weight() >= 32:
-            self.main_blob.set_weight(int(self.main_blob.get_weight() / 2))
-            blob = Blob(self.main_blob.get_position(), self.player_id)
-            blob.set_weight(self.main_blob.get_weight())
-            self.blobs.append(blob)
-            self.model.blobs.append(blob)
-            blob.force = vector.multiply(vector.normalize(self.velocity), 150)
+        for blob in self.blobs[:]:
+            if blob.get_weight() >= 32 and len(self.blobs) < 16:
+                blob.set_weight(int(blob.get_weight() / 2))
+                position = vector.add(blob.get_position(), vector.multiply(self.velocity, blob.get_radius()*2))
+                new_blob = Blob(position, self.player_id, self)
+                new_blob.set_weight(blob.get_weight())
+                self.blobs.append(new_blob)
+                self.model.blobs.append(new_blob)
+                new_blob.force = vector.multiply(vector.normalize(self.velocity), 150)
 
     def divide(self):
         self.divide_now = True
@@ -50,11 +68,15 @@ class BlobFamily():
         return self.blobs
 
     def get_largest_blob(self):
-        return self.main_blob.get_proxy()
+        if self.main_blob is None: return None
+        else: return self.main_blob.get_proxy()
 
     def get_average_position(self):
         position_sum = reduce(lambda x, y: vector.add(x, y), [vector.multiply(blob.get_position(), blob.get_weight()) for blob in self.blobs])
         return vector.divide(position_sum, sum([blob.get_weight() for blob in self.blobs]))
 
     def get_total_cell_radius(self):
-        return sum([blob.get_radius() for blob in self.blobs])
+        return sum([blob.get_radius() for blob in self.blobs]) / math.sqrt(len(self.blobs))
+
+    def is_alive(self):
+        return len(self.blobs) > 0

@@ -8,6 +8,8 @@ from pellet import PelletProxy
 
 class CowardHungryAIController(AbstractController):
     def update(self):
+        if not self.manipulator.is_alive(): return
+
         blob = self.manipulator.get_largest_blob()
 
         others = self.manipulator.get_other_items()

@@ -8,11 +8,12 @@ class Blob(AbstractItem):
     INIT_WEIGHT = 20
     BASE_SPEED = 250
 
-    def __init__(self, position, player_id):
+    def __init__(self, position, player_id, blob_family):
         self.weight = self.INIT_WEIGHT
         super().__init__(position, self.__get_radius_from_weight())
 
         self.player_id = player_id
+        self.blob_family = blob_family
         self.speed = self.__get_speed_from_radius()
         self.proxy = BlobProxy(self)
         self.force = (0,0)
@@ -45,8 +46,8 @@ class Blob(AbstractItem):
         distance = vector.norm(difference)
         strength = distance - self.radius - blob.get_radius()
 
-        self.force = vector.add(self.force, vector.multiply(difference, strength/distance))
-        blob.force = vector.add(blob.force, vector.multiply(difference,  -strength/distance))
+        self.force = vector.add(self.force, vector.multiply(difference,  0.1*strength/distance - 0.01))
+        blob.force = vector.add(blob.force, vector.multiply(difference, -0.1*strength/distance + 0.01))
 
     def get_weight(self):
         return self.weight
@@ -55,15 +56,26 @@ class Blob(AbstractItem):
         self.set_weight(self.weight + weight)
 
     def set_weight(self, weight):
+        old_weight = self.weight
+
         self.weight = weight
         self.radius = self.__get_radius_from_weight()
         self.speed = self.__get_speed_from_radius()
+
+        if weight > old_weight:
+            if weight > self.blob_family.main_blob.get_weight():
+                self.blob_family.main_blob = self
+        elif self is self.blob_family.main_blob:
+            self.blob_family.select_main_blob()
 
     def get_proxy(self):
         return self.proxy
 
     def get_player_id(self):
         return self.player_id
+
+    def remove_from_family(self):
+        self.blob_family.remove(self)
 
     def __get_radius_from_weight(self):
         return math.sqrt(self.weight*5)

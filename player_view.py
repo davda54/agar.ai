@@ -1,5 +1,6 @@
 import vector
 from abstract_view import AbstractView
+from gameboard_view import GameboardView
 
 
 class PlayerView(AbstractView):
@@ -8,7 +9,13 @@ class PlayerView(AbstractView):
         self.center_blob_family = blob_family
         self.player_radius = player_radius
 
+        self.backup_view = GameboardView(screen, model)
+
     def render(self):
+        if not self.center_blob_family.is_alive():
+            self.backup_view.render()
+            return
+
         self.__set_resize_ratio()
         self.__set_resize_offset()
 
@@ -29,4 +36,8 @@ class PlayerView(AbstractView):
         self.resize_offset = vector.substract(screen_center, scale_position)
 
     def _fits_on_screen(self, item):
-        return True
+        right, bottom = self._map_coord_to_screen(vector.add(item.get_position(), (item.get_radius(), item.get_radius())))
+        left, top = self._map_coord_to_screen(vector.substract(item.get_position(), (item.get_radius(), item.get_radius())))
+        screen_size = self.screen.get_size()
+
+        return left >= 0 and top >= 0 and right >= screen_size[0] and bottom >= screen_size[1]
