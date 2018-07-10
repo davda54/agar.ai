@@ -136,6 +136,20 @@ class Model:
 
             blob_a = blob_a.get_next()
 
+        bullet_blob = self.bullet_blobs.get_first_iterator()
+        while bullet_blob is not None:
+
+            for blob in self.blobs:
+                if bullet_blob.get().collides(blob.get()):
+                    blob.get().add_weight(bullet_blob.get().get_weight())
+                    tmp = bullet_blob.get_next()
+                    self.bullet_blobs.delete(bullet_blob)
+                    bullet_blob = tmp
+                    break
+            else:
+                bullet_blob = bullet_blob.get_next()
+
+
     # dont generate on active cell
     def __generate_pellet(self):
         weight = random.randint(1, 5)
