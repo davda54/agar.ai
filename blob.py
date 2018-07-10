@@ -8,6 +8,7 @@ class Blob(AbstractBlob):
     def __init__(self, model, position, player_id, blob_family, force=(0,0)):
         super().__init__(model, position, player_id, self.INIT_WEIGHT, force)
         self.blob_family = blob_family
+        self.proxy = BlobProxy(self)
 
     def get_together(self, center):
         difference = vector.multiply(vector.substract(center, self.position), 0.015)
@@ -36,3 +37,17 @@ class Blob(AbstractBlob):
 
     def remove_from_family(self):
         self.blob_family.remove(self)
+
+    def get_proxy(self):
+        return self.proxy
+
+# read-only wrapper around Blob
+class BlobProxy():
+    def __init__(self, blob):
+        self.__blob = blob
+
+    def get_position(self):
+        return self.__blob.get_position()
+
+    def get_weight(self):
+        return self.__blob.get_weight()
