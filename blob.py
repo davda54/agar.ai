@@ -39,7 +39,7 @@ class Blob(AbstractBlob):
                 bullet_blob = BulletBlob(self.model, position, self.player_id, vector.multiply(direction, BLOB_SHOOT_STRENGTH))
                 self.model.add_bullet_blob(bullet_blob)
             else:
-                weight = min(random.randint(BLOB_INIT_WEIGHT, max(BLOB_INIT_WEIGHT, self.get_weight()/4)), self.get_weight() - BLOB_INIT_WEIGHT)
+                weight = min(random.randint(BLOB_INIT_WEIGHT, max(BLOB_INIT_WEIGHT, int(self.get_weight()/4))), self.get_weight() - BLOB_INIT_WEIGHT)
                 self.add_weight(-weight)
                 new_blob = Blob(self.model, position, self.player_id, self.blob_family, (0,0), weight)
 

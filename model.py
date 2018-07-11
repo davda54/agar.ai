@@ -144,7 +144,7 @@ class Model:
 
             for blob in self.blobs:
                 if bullet_blob.get().collides(blob.get()):
-                    blob.get().push(bullet_blob.get())
+                    blob.get().push(bullet_blob.get(), BULLET_BLOB_STRENGTH)
                     blob.get().add_weight(int(BULLET_EAT_RATIO*bullet_blob.get().get_weight() + 0.5))
 
                     tmp = bullet_blob.get_next()
@@ -155,7 +155,7 @@ class Model:
 
                 for pellet in self.pellets:
                     if isinstance(pellet.get(), LargePellet) and pellet.get().touches(bullet_blob.get()):
-                        pellet.get().push(bullet_blob.get())
+                        pellet.get().push(bullet_blob.get(), BULLET_PELLET_STRENGTH)
 
                         tmp = bullet_blob.get_next()
                         self.bullet_blobs.delete(bullet_blob)

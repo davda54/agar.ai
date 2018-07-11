@@ -12,7 +12,7 @@ class AbstractBlob(AbstractMovingItem):
         self.player_id = player_id
 
     def get_weight(self):
-        return self.weight
+        return int(self.weight + 0.5)
 
     def add_weight(self, weight):
         self.set_weight(self.weight + weight)

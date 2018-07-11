@@ -18,11 +18,11 @@ class AbstractMovingItem(AbstractItem):
 
         self.bounce_from_boundaries()
 
-    def push(self, bullet_blob):
+    def push(self, bullet_blob, strength):
         direction = vector.normalize(vector.substract(self.position, bullet_blob.get_position()))
         bullet_force = bullet_blob.get_force()
 
-        self_force_strength = vector.dot_product(direction, bullet_force)
+        self_force_strength = vector.dot_product(direction, bullet_force)*strength
         self.add_force(vector.multiply(direction, self_force_strength))
         bullet_blob.set_force(vector.substract(bullet_force, self.force))
 
@@ -47,4 +47,4 @@ class AbstractMovingItem(AbstractItem):
         self.speed = self.__get_speed_from_radius(self.radius)
 
     def __get_speed_from_radius(self, radius):
-        return BASE_SPEED * (radius ** -0.4)
+        return BASE_SPEED * ((radius*2) ** -0.439)
