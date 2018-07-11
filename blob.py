@@ -26,7 +26,7 @@ class Blob(AbstractBlob):
         blob.force = vector.add(blob.force, vector.multiply(difference, -0.1*strength/distance + 0.01))
 
     def explode(self):
-        self.set_weight(int(self.get_weight() * 0.9 + 0.5))
+        self.set_weight(int(self.get_weight() * 0.8 + 0.5))
         has_divided = False
 
         while self.get_weight() >= 2*self.INIT_WEIGHT and self.blob_family.number_of_blobs() < self.blob_family.MAX_NUM_BLOBS:

@@ -160,7 +160,7 @@ class Model:
     # dont generate on active cell
     def __generate_pellet(self):
         weight = random.randint(1, 5)
-        pellet = Pellet(self.__random_position(5), weight)
+        pellet = Pellet(self.__random_position(10), weight)
         self.pellets.append(pellet)
 
     # dont generate on active cell
