@@ -28,4 +28,7 @@ class AbstractMovingItem(AbstractItem):
         elif self.position[1] > board_size[1] - self.radius: y = board_size[1] - self.radius - self.position[1] - 10
         else: y = 0
 
-        self.force = vector.add(self.force, (x, y))
+        self.add_force((x, y))
+
+    def add_force(self, force):
+        self.force = vector.add(self.force, force)

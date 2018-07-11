@@ -4,7 +4,7 @@ from abstract_moving_item import AbstractMovingItem
 class LargePellet(AbstractMovingItem):
     WEIGHT = 100
     RADIUS = 25
-    SPEED = 250
+    SPEED = 100
 
     def __init__(self, model, position):
         super().__init__(model, position, self.RADIUS, self.SPEED, (0,0))
@@ -15,11 +15,8 @@ class LargePellet(AbstractMovingItem):
         bullet_force = bullet_blob.get_force()
 
         pellet_force_strength = vector.dot_product(direction, bullet_force)
-        self.force = vector.multiply(direction, pellet_force_strength)
+        self.add_force(vector.multiply(direction, pellet_force_strength))
         bullet_blob.set_force(vector.substract(bullet_force, self.force))
-
-    def add_force(self, force):
-        self.force = vector.add(self.force, force)
 
     def affect(self, blob):
         if blob.get_weight() > 250:

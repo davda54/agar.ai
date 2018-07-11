@@ -14,16 +14,16 @@ class Blob(AbstractBlob):
         self.proxy = BlobProxy(self)
 
     def get_together(self, center):
-        difference = vector.multiply(vector.substract(center, self.position), 0.015)
-        self.force = vector.add(self.force, difference)
+        difference = vector.substract(center, self.position)
+        self.add_force(vector.multiply(difference, 0.015))
 
     def repel_from_each_other(self, blob):
         difference = vector.substract(blob.get_position(), self.position)
         distance = vector.norm(difference)
         strength = distance - self.radius - blob.get_radius()
 
-        self.force = vector.add(self.force, vector.multiply(difference,  0.1*strength/distance - 0.01))
-        blob.force = vector.add(blob.force, vector.multiply(difference, -0.1*strength/distance + 0.01))
+        self.add_force(vector.multiply(difference,  0.1*strength/distance - 0.01))
+        blob.add_force(vector.multiply(difference, -0.1*strength/distance + 0.01))
 
     def explode(self):
         self.set_weight(int(self.get_weight() * 0.8 + 0.5))
