@@ -3,6 +3,7 @@ from pygame import gfxdraw
 
 import vector
 from abstract_blob import AbstractBlob
+from large_pellet import LargePellet
 from pellet import Pellet
 
 
@@ -19,7 +20,7 @@ class AbstractView:
 
         for item in self.model.get_items():
             if isinstance(item, AbstractBlob): self._draw_blob(item)
-            elif isinstance(item, Pellet): self._draw_pellet(item)
+            elif isinstance(item, Pellet) or isinstance(item, LargePellet): self._draw_pellet(item)
 
         self.screen.unlock()
 
@@ -28,7 +29,7 @@ class AbstractView:
         self._draw_circle(blob.get_position(), blob.get_radius(), color)
 
     def _draw_pellet(self, pellet):
-        if pellet.get_bonus_weight() == Pellet.LARGE_PELLET_WEIGHT:
+        if isinstance(pellet, LargePellet):
             self._draw_circle(pellet.get_position(), pellet.get_radius(), (128, 128, 128))
         else:
             shade = 96 + pellet.get_bonus_weight()*16

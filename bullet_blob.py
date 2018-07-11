@@ -11,6 +11,11 @@ class BulletBlob(AbstractBlob):
     def get_proxy(self):
         return self.proxy
 
+    def get_force(self):
+        return self.force
+
+    def set_force(self, force):
+        self.force = force
 
 # read-only wrapper around Blob
 class BulletBlobProxy():

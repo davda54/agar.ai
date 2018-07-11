@@ -18,6 +18,9 @@ def divide(vec, scalar):
 def multiply(vec, scalar):
     return (vec[0] * scalar, vec[1] * scalar)
 
+def dot_product(vec_a, vec_b):
+    return vec_a[0]*vec_b[0] + vec_a[1]*vec_b[1]
+
 def add(vec_a, vec_b):
     return (vec_a[0] + vec_b[0], vec_a[1] + vec_b[1])
 

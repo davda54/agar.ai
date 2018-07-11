@@ -4,6 +4,7 @@ import time
 from blob import Blob
 from blob_family import BlobFamily
 from double_linked_list import DoubleLinkedList
+from large_pellet import LargePellet
 from manipulator import Manipulator
 from pellet import Pellet
 
@@ -17,6 +18,7 @@ class Model:
 
     def __init__(self):
         self.pellets = DoubleLinkedList()
+
         for _ in range(self.NUM_OF_PELLETS): self.__generate_pellet()
 
         for _ in range(self.NUM_OF_LARGE_PELLETS): self.__generate_large_pellet()
@@ -34,12 +36,12 @@ class Model:
 
         for controller in self.controllers:
             controller.update()
-
         for family in self.blob_families:
             family.update(dt)
-
         for bullet_blob in self.bullet_blobs:
             bullet_blob.get().update(dt)
+        for pellet in self.pellets:
+            if isinstance(pellet.get(), LargePellet): pellet.get().update(dt)
 
         self.__resolve_collisions()
 
@@ -78,7 +80,7 @@ class Model:
                 if blob_a.get().collides(pellet.get()):
                     pellet.get().affect(blob_a.get())
 
-                    if pellet.get().get_bonus_weight() == Pellet.LARGE_PELLET_WEIGHT: self.__generate_large_pellet()
+                    if isinstance(pellet.get(), LargePellet): self.__generate_large_pellet()
                     else: self.__generate_pellet()
 
                     tmp = pellet.get_next()
@@ -147,16 +149,21 @@ class Model:
                     bullet_blob = tmp
                     break
             else:
+
+                for pellet in self.pellets:
+                    if isinstance(pellet.get(), LargePellet) and pellet.get().touches(bullet_blob.get()):
+                        pellet.get().push(bullet_blob.get())
+
                 bullet_blob = bullet_blob.get_next()
 
 
     # dont generate on active cell
     def __generate_pellet(self):
         weight = random.randint(1, 5)
-        pellet = Pellet(self.__random_position(5), weight, 5)
+        pellet = Pellet(self.__random_position(5), weight)
         self.pellets.append(pellet)
 
     # dont generate on active cell
     def __generate_large_pellet(self):
-        pellet = Pellet(self.__random_position(50), Pellet.LARGE_PELLET_WEIGHT, 22)
+        pellet = LargePellet(self, self.__random_position(50))
         self.pellets.append(pellet)
