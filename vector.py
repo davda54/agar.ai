@@ -1,4 +1,5 @@
 import math
+import random
 
 def distance(a, b):
     return norm(substract(a, b))
@@ -29,3 +30,7 @@ def substract(vec_a, vec_b):
 
 def normalize(vec):
     return divide(vec, norm(vec))
+
+def random_direction():
+    angle = random.uniform(0, 2.0*math.pi)
+    return (math.sin(angle), math.cos(angle))

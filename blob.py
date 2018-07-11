@@ -1,9 +1,12 @@
+import random
+
 import vector
 from abstract_blob import AbstractBlob
+from bullet_blob import BulletBlob
 
 
 class Blob(AbstractBlob):
-    INIT_WEIGHT = 20
+    INIT_WEIGHT = 16
 
     def __init__(self, model, position, player_id, blob_family, force=(0,0)):
         super().__init__(model, position, player_id, self.INIT_WEIGHT, force)
@@ -21,6 +24,28 @@ class Blob(AbstractBlob):
 
         self.force = vector.add(self.force, vector.multiply(difference,  0.1*strength/distance - 0.01))
         blob.force = vector.add(blob.force, vector.multiply(difference, -0.1*strength/distance + 0.01))
+
+    def explode(self):
+        self.set_weight(int(self.get_weight() * 0.9 + 0.5))
+        has_divided = False
+
+        while self.get_weight() >= 2*self.INIT_WEIGHT and self.blob_family.number_of_blobs() < self.blob_family.MAX_NUM_BLOBS:
+            self.add_weight(-self.INIT_WEIGHT)
+            direction = vector.random_direction()
+            position = vector.add(self.get_position(), vector.multiply(direction, self.get_radius()))
+
+            shoot = random.randint(0,2) == 0
+
+            if shoot:
+                bullet_blob = BulletBlob(self.model, position, self.player_id, vector.multiply(direction, 200))
+                self.model.add_bullet_blob(bullet_blob)
+            else:
+                new_blob = Blob(self.model, position, self.player_id, self.blob_family, vector.multiply(direction, 50))
+                self.blob_family.blobs.append(new_blob)
+                self.model.add_blob(new_blob)
+                has_divided = True
+
+        if has_divided: self.blob_family.divide_countdown = max(20, self.blob_family.get_total_cell_radius() * 0.2)
 
     def set_weight(self, weight):
         old_weight = self.weight

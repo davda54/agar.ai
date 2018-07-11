@@ -8,6 +8,8 @@ from bullet_blob import BulletBlob
 
 # contains all blobs that makes up a player and manipulates them
 class BlobFamily():
+    MAX_NUM_BLOBS = 16
+
     def __init__(self, model, player_id):
         self.model = model
         self.blobs = [] # better use some heap to quickly get the largest blob
@@ -54,6 +56,9 @@ class BlobFamily():
         if blob is self.main_blob:
             self.select_main_blob()
 
+    def number_of_blobs(self):
+        return len(self.blobs)
+
     def divide(self):
         self.divide_now = True
 
@@ -80,7 +85,7 @@ class BlobFamily():
     def __divide(self):
         has_divided = False
         for blob in self.blobs[:]:
-            if blob.get_weight() >= 32 and len(self.blobs) < 16:
+            if blob.get_weight() >= 32 and self.number_of_blobs() < self.MAX_NUM_BLOBS:
                 blob.set_weight(int(blob.get_weight() / 2))
                 position = vector.add(blob.get_position(), vector.multiply(self.velocity, blob.get_radius() * 2))
                 new_blob = Blob(self.model, position, self.player_id, self, vector.multiply(vector.normalize(self.velocity), 200))

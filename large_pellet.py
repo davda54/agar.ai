@@ -22,7 +22,10 @@ class LargePellet(AbstractMovingItem):
         self.force = vector.add(self.force, force)
 
     def affect(self, blob):
-        blob.add_weight(self.WEIGHT)
+        if blob.get_weight() > 250:
+            blob.explode()
+        else:
+            blob.add_weight(self.WEIGHT)
 
     def get_bonus_weight(self):
         return self.WEIGHT
