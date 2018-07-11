@@ -165,13 +165,27 @@ class Model:
                     bullet_blob = bullet_blob.get_next()
 
 
-    # TODO: dont generate on active cell
     def __generate_pellet(self):
         weight = random.randint(1, 5)
         pellet = Pellet(self.__random_position(10), weight)
+
+        while True:
+            for blob in self.blobs:
+                if blob.get().touches(pellet):
+                    break
+            else: break
+            pellet.position = self.__random_position(50)
+
         self.pellets.append(pellet)
 
-    # TODO: dont generate on active cell
     def __generate_large_pellet(self):
         pellet = LargePellet(self, self.__random_position(50))
+
+        while True:
+            for blob in self.blobs:
+                if blob.get().touches(pellet):
+                    break
+            else: break
+            pellet.position = self.__random_position(50)
+
         self.pellets.append(pellet)
