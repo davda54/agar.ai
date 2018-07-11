@@ -12,6 +12,10 @@ class Blob(AbstractBlob):
         self.blob_family = blob_family
         self.proxy = BlobProxy(self)
 
+    def update(self, dt, global_velocity=(0, 0)):
+        super().update(dt, global_velocity)
+        self.weight -= self.weight * BLOB_WEIGHT_LOSE_PER_SECOND * dt
+
     def get_together(self, center):
         difference = vector.substract(center, self.position)
         self.add_force(vector.multiply(difference, BLOB_GRAVITATION))

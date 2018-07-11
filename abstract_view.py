@@ -17,7 +17,7 @@ class AbstractView:
         self.id_to_col = {}
 
     def render(self):
-        #self.screen.lock()
+        self.screen.lock()
 
         self.screen.fill(VIEW_BACKGROUND_COLOR)
         self._draw_rect((0,0), self.model.get_board_size(), VIEW_BORDER_COLOR)
@@ -26,15 +26,19 @@ class AbstractView:
             if isinstance(item, AbstractBlob): self._draw_blob(item)
             elif isinstance(item, Pellet) or isinstance(item, LargePellet): self._draw_pellet(item)
 
-        #self.screen.unlock()
+        self.screen.unlock()
+
+        self._render_text()
+
+    def _render_text(self):
+        for item in self.model.get_items():
+            if isinstance(item, Blob): self._draw_weight(item)
 
     def _draw_blob(self, blob):
         if not self._fits_on_screen(blob): return
 
         color = self._get_unique_color(blob.get_player_id())
         self._draw_circle(blob.get_position(), blob.get_radius(), color)
-
-        if isinstance(blob, Blob): self._draw_weight(blob)
 
 
     def _draw_pellet(self, pellet):
