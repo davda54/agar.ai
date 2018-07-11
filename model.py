@@ -14,16 +14,15 @@ from pellet import Pellet
 class Model:
     def __init__(self):
         self.pellets = DoubleLinkedList()
+        self.blobs = DoubleLinkedList()
+        self.bullet_blobs = DoubleLinkedList()
+        self.blob_families = []
+        self.controllers = []
+        self.lastime = time.time()
 
         for _ in range(SMALL_PELLET_NUM): self.__generate_pellet()
 
         for _ in range(LARGE_PELLET_NUM): self.__generate_large_pellet()
-
-        self.blob_families = []
-        self.blobs = DoubleLinkedList()
-        self.bullet_blobs = DoubleLinkedList()
-        self.controllers = []
-        self.lastime = time.time()
 
     def update(self):
         dt = self.__get_dt()
