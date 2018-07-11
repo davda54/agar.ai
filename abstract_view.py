@@ -4,6 +4,7 @@ from pygame import gfxdraw
 import vector
 from abstract_blob import AbstractBlob
 from large_pellet import LargePellet
+from parameters import *
 from pellet import Pellet
 
 
@@ -15,8 +16,8 @@ class AbstractView:
     def render(self):
         self.screen.lock()
 
-        self.screen.fill((0,0,0))
-        self._draw_rect((0,0), self.model.get_board_size(), (128,128,128))
+        self.screen.fill(VIEW_BACKGROUND_COLOR)
+        self._draw_rect((0,0), self.model.get_board_size(), VIEW_BORDER_COLOR)
 
         for item in self.model.get_items():
             if isinstance(item, AbstractBlob): self._draw_blob(item)
@@ -30,10 +31,9 @@ class AbstractView:
 
     def _draw_pellet(self, pellet):
         if isinstance(pellet, LargePellet):
-            self._draw_circle(pellet.get_position(), pellet.get_radius(), (128, 128, 128))
+            self._draw_circle(pellet.get_position(), pellet.get_radius(), VIEW_LARGE_PELLET_COLOR)
         else:
-            shade = 96 + pellet.get_bonus_weight()*16
-            self._draw_circle(pellet.get_position(), pellet.get_radius(), (shade,shade,shade))
+            self._draw_circle(pellet.get_position(), pellet.get_radius(), VIEW_SMALL_PELLET_COLOR)
 
     # draw circle in the board coordinates onto the screen coordinates
     def _draw_circle(self, pos, r, col):
@@ -72,7 +72,7 @@ class AbstractView:
 
     # uses golden angle to return the most distant hues for different consecutive ns
     def _get_unique_color(self, n):
-        hue = n*137.5077640500378546463487
+        hue = n*137.5077640500378546463487 #phi
 
         color = pygame.Color(0,0,0,0)
         color.hsva = (hue % 360.0, 100, 100, 100)

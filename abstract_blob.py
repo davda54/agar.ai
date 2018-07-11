@@ -1,11 +1,10 @@
 import math
 
 from abstract_moving_item import AbstractMovingItem
+from parameters import *
 
 
 class AbstractBlob(AbstractMovingItem):
-
-    BASE_SPEED = 250
 
     def __init__(self, model, position, player_id, weight, force):
         self.weight = weight
@@ -36,4 +35,4 @@ class AbstractBlob(AbstractMovingItem):
         return radius*radius / 5
 
     def __get_speed_from_radius(self, radius):
-        return self.BASE_SPEED*2.2*(radius**-0.439)
+        return BLOB_BASE_SPEED*(radius**-0.4)

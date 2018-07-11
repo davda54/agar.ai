@@ -1,31 +1,21 @@
-import vector
 from abstract_moving_item import AbstractMovingItem
+from parameters import *
+
 
 class LargePellet(AbstractMovingItem):
-    WEIGHT = 100
-    RADIUS = 25
-    SPEED = 100
 
     def __init__(self, model, position):
-        super().__init__(model, position, self.RADIUS, self.SPEED, (0,0))
+        super().__init__(model, position, LARGE_PELLET_RADIUS, LARGE_PELLET_SPEED, (0,0))
         self.proxy = LargePelletProxy(self)
 
-    def push(self, bullet_blob):
-        direction = vector.normalize(vector.substract(self.position, bullet_blob.get_position()))
-        bullet_force = bullet_blob.get_force()
-
-        pellet_force_strength = vector.dot_product(direction, bullet_force)
-        self.add_force(vector.multiply(direction, pellet_force_strength))
-        bullet_blob.set_force(vector.substract(bullet_force, self.force))
-
     def affect(self, blob):
-        if blob.get_weight() > 250:
+        if blob.get_weight() > BLOB_MINIMAL_WEIGHT_TO_EXPLODE:
             blob.explode()
         else:
-            blob.add_weight(self.WEIGHT)
+            blob.add_weight(LARGE_PELLET_WEIGHT)
 
     def get_bonus_weight(self):
-        return self.WEIGHT
+        return LARGE_PELLET_WEIGHT
 
     def get_proxy(self):
         return self.proxy

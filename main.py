@@ -4,16 +4,17 @@ from pygame.locals import *
 from coward_hungry_ai_controller import CowardHungryAIController
 from model import Model
 from mouse_controller import MouseController
+from parameters import *
 from player_view import PlayerView
 from stupid_hungry_ai_controller import StupidHungryAIController
 
 
 def run():
     pygame.init()
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     model = Model()
-    model.register_controller(MouseController(screen.get_size(), 48, model))
+    model.register_controller(MouseController(screen.get_size(), MOUSE_SENSITIVE_RADIUS, model))
     model.register_controller(CowardHungryAIController())
     model.register_controller(CowardHungryAIController())
 
@@ -27,7 +28,7 @@ def run():
     model.register_controller(StupidHungryAIController())
 
     #view = GameboardView(screen, model)
-    view = PlayerView(screen, model, model.blob_families[0], 48)
+    view = PlayerView(screen, model, model.blob_families[0], MOUSE_SENSITIVE_RADIUS)
 
     done = False
     clock = pygame.time.Clock()

@@ -4,12 +4,11 @@ from functools import reduce
 import vector
 from blob import Blob
 from bullet_blob import BulletBlob
+from parameters import *
 
 
 # contains all blobs that makes up a player and manipulates them
 class BlobFamily():
-    MAX_NUM_BLOBS = 16
-
     def __init__(self, model, player_id):
         self.model = model
         self.blobs = [] # better use some heap to quickly get the largest blob
@@ -82,25 +81,28 @@ class BlobFamily():
     def is_alive(self):
         return len(self.blobs) > 0
 
+    def set_countdown(self):
+        self.divide_countdown = max(BLOB_MERGE_INIT_TIME, self.get_total_cell_radius() * BLOB_MERGE_TIME_MULTIPLIER)
+
     def __divide(self):
         has_divided = False
         for blob in self.blobs[:]:
-            if blob.get_weight() >= 32 and self.number_of_blobs() < self.MAX_NUM_BLOBS:
+            if blob.get_weight() >= 2*BLOB_INIT_WEIGHT and self.number_of_blobs() < BLOB_MAX_NUM:
                 blob.set_weight(int(blob.get_weight() / 2))
                 position = vector.add(blob.get_position(), vector.multiply(self.velocity, blob.get_radius() * 2))
-                new_blob = Blob(self.model, position, self.player_id, self, vector.multiply(vector.normalize(self.velocity), 200))
+                new_blob = Blob(self.model, position, self.player_id, self, vector.multiply(vector.normalize(self.velocity), BLOB_DIVIDE_STRENGTH))
                 new_blob.set_weight(blob.get_weight())
-                self.blobs.append(new_blob)
+                self.add_blob(new_blob)
                 self.model.add_blob(new_blob)
 
                 has_divided = True
 
-        if has_divided: self.divide_countdown = max(20, self.get_total_cell_radius() * 0.2)
+        if has_divided: self.set_countdown()
 
     def __shoot(self):
         shooting_blob = self.main_blob
-        if shooting_blob.get_weight() >= 32:
-            shooting_blob.add_weight(-BulletBlob.INIT_WEIGHT)
+        if shooting_blob.get_weight() >= 2*BLOB_INIT_WEIGHT:
+            shooting_blob.add_weight(-BULLET_WEIGHT)
             position = vector.add(shooting_blob.get_position(), vector.multiply(self.velocity, shooting_blob.get_radius()))
-            new_blob = BulletBlob(self.model, position, self.player_id, vector.multiply(vector.normalize(self.velocity), 200))
+            new_blob = BulletBlob(self.model, position, self.player_id, vector.multiply(vector.normalize(self.velocity), BLOB_SHOOT_STRENGTH))
             self.model.add_bullet_blob(new_blob)

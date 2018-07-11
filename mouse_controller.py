@@ -20,8 +20,6 @@ class MouseController(AbstractController):
         direction = vector.divide(direction, self.player_radius)
         self.manipulator.set_velocity(direction)
 
-        weight = self.manipulator.get_largest_blob().get_weight()
-
         for event in self.model.events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1: self.manipulator.divide()

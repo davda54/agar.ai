@@ -3,49 +3,54 @@ import random
 import vector
 from abstract_blob import AbstractBlob
 from bullet_blob import BulletBlob
+from parameters import *
 
 
 class Blob(AbstractBlob):
-    INIT_WEIGHT = 16
-
-    def __init__(self, model, position, player_id, blob_family, force=(0,0)):
-        super().__init__(model, position, player_id, self.INIT_WEIGHT, force)
+    def __init__(self, model, position, player_id, blob_family, force=(0,0), weight=BLOB_INIT_WEIGHT):
+        super().__init__(model, position, player_id, weight, force)
         self.blob_family = blob_family
         self.proxy = BlobProxy(self)
 
     def get_together(self, center):
         difference = vector.substract(center, self.position)
-        self.add_force(vector.multiply(difference, 0.015))
+        self.add_force(vector.multiply(difference, BLOB_GRAVITATION))
 
     def repel_from_each_other(self, blob):
         difference = vector.substract(blob.get_position(), self.position)
         distance = vector.norm(difference)
         strength = distance - self.radius - blob.get_radius()
 
-        self.add_force(vector.multiply(difference,  0.1*strength/distance - 0.01))
-        blob.add_force(vector.multiply(difference, -0.1*strength/distance + 0.01))
+        self.add_force(vector.multiply(difference,  BLOB_REPEL_STRENGTH*strength/distance - BLOB_REPEL_BASE_STRENGTH))
+        blob.add_force(vector.multiply(difference, -BLOB_REPEL_STRENGTH*strength/distance + BLOB_REPEL_BASE_STRENGTH))
 
     def explode(self):
-        self.set_weight(int(self.get_weight() * 0.8 + 0.5))
+        self.set_weight(int(self.get_weight() * BLOB_EXPLOSION_SHRINK + 0.5))
         has_divided = False
 
-        while self.get_weight() >= 2*self.INIT_WEIGHT and self.blob_family.number_of_blobs() < self.blob_family.MAX_NUM_BLOBS:
-            self.add_weight(-self.INIT_WEIGHT)
+        while self.get_weight() >= 2*BLOB_INIT_WEIGHT and self.blob_family.number_of_blobs() < BLOB_MAX_NUM:
             direction = vector.random_direction()
             position = vector.add(self.get_position(), vector.multiply(direction, self.get_radius()))
 
-            shoot = random.randint(0,2) == 0
+            shoot = random.randint(0, BLOB_EXPLOSION_SHOOT_CHANCE) == 0
 
             if shoot:
-                bullet_blob = BulletBlob(self.model, position, self.player_id, vector.multiply(direction, 200))
+                self.add_weight(-BULLET_WEIGHT)
+                bullet_blob = BulletBlob(self.model, position, self.player_id, vector.multiply(direction, BLOB_SHOOT_STRENGTH))
                 self.model.add_bullet_blob(bullet_blob)
             else:
-                new_blob = Blob(self.model, position, self.player_id, self.blob_family, vector.multiply(direction, 50))
-                self.blob_family.blobs.append(new_blob)
+                weight = min(random.randint(BLOB_INIT_WEIGHT, 4*BLOB_INIT_WEIGHT), self.get_weight() - BLOB_INIT_WEIGHT)
+                self.add_weight(-weight)
+                new_blob = Blob(self.model, position, self.player_id, self.blob_family, (0,0), weight)
+
+                self.blob_family.add_blob(new_blob)
                 self.model.add_blob(new_blob)
                 has_divided = True
 
-        if has_divided: self.blob_family.divide_countdown = max(20, self.blob_family.get_total_cell_radius() * 0.2)
+        if has_divided: self.blob_family.set_countdown()
+
+    def can_eat(self, other_blob):
+        return self.weight * BLOB_WEIGHT_RATIO_TO_EAT > other_blob.get_weight()
 
     def set_weight(self, weight):
         old_weight = self.weight

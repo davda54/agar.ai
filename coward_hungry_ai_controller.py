@@ -2,6 +2,7 @@ import vector
 from abstract_controller import AbstractController
 from blob import BlobProxy
 from bullet_blob import BulletBlobProxy
+from parameters import *
 from pellet import PelletProxy
 
 
@@ -23,10 +24,10 @@ class CowardHungryAIController(AbstractController):
                 value = item.get_bonus_weight()**2 / distance
                 run_away = False
             elif isinstance(item, BlobProxy) or isinstance(item, BulletBlobProxy):
-                if item.get_weight()*0.9 > blob.get_weight():
+                if item.get_weight()*(BLOB_WEIGHT_RATIO_TO_EAT*1.1) > blob.get_weight():
                     value = item.get_weight()**2 / distance
                     run_away = True
-                elif blob.get_weight()*0.85 > item.get_weight():
+                elif blob.get_weight()*BLOB_WEIGHT_RATIO_TO_EAT > item.get_weight():
                     value = item.get_weight()**2 / distance
                     run_away = False
                 else:

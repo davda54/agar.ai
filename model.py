@@ -6,22 +6,18 @@ from blob_family import BlobFamily
 from double_linked_list import DoubleLinkedList
 from large_pellet import LargePellet
 from manipulator import Manipulator
+from parameters import *
 from pellet import Pellet
 
 
 # implements the game logic and moves the environment
 class Model:
-    WIDTH = 2500
-    HEIGHT = 2500
-    NUM_OF_PELLETS = 200
-    NUM_OF_LARGE_PELLETS = 5
-
     def __init__(self):
         self.pellets = DoubleLinkedList()
 
-        for _ in range(self.NUM_OF_PELLETS): self.__generate_pellet()
+        for _ in range(SMALL_PELLET_NUM): self.__generate_pellet()
 
-        for _ in range(self.NUM_OF_LARGE_PELLETS): self.__generate_large_pellet()
+        for _ in range(LARGE_PELLET_NUM): self.__generate_large_pellet()
 
         self.blob_families = []
         self.blobs = DoubleLinkedList()
@@ -30,30 +26,19 @@ class Model:
         self.lastime = time.time()
 
     def update(self):
-        currentTime = time.time()
-        dt = currentTime - self.lastime
-        self.lastime = currentTime
-
-        for controller in self.controllers:
-            controller.update()
-        for family in self.blob_families:
-            family.update(dt)
-        for bullet_blob in self.bullet_blobs:
-            bullet_blob.get().update(dt)
-        for pellet in self.pellets:
-            if isinstance(pellet.get(), LargePellet): pellet.get().update(dt)
-
+        dt = self.__get_dt()
+        self.__move(dt)
         self.__resolve_collisions()
 
     def get_board_size(self):
-        return (self.WIDTH, self.HEIGHT)
+        return (BOARD_WIDTH, BOARD_HEIGHT)
 
     def get_items(self):
         return [pellet.get() for pellet in self.pellets] + [bullet_blob.get() for bullet_blob in self.bullet_blobs] + [blob.get() for blob in self.blobs]
 
     def register_controller(self, controller):
         blob_family = BlobFamily(self, len(self.controllers))
-        blob = Blob(self, self.__random_position(50), len(self.controllers), blob_family)
+        blob = Blob(self, self.__random_position(100), len(self.controllers), blob_family)
         blob_family.add_blob(blob)
         controller.set_manipulator(Manipulator(blob_family, self))
 
@@ -67,8 +52,24 @@ class Model:
     def add_bullet_blob(self, bullet_blob):
         self.bullet_blobs.append(bullet_blob)
 
+    def __move(self, dt):
+        for controller in self.controllers:
+            controller.update()
+        for family in self.blob_families:
+            family.update(dt)
+        for bullet_blob in self.bullet_blobs:
+            bullet_blob.get().update(dt)
+        for pellet in self.pellets:
+            if isinstance(pellet.get(), LargePellet): pellet.get().update(dt)
+
+    def __get_dt(self):
+        currentTime = time.time()
+        dt = currentTime - self.lastime
+        self.lastime = currentTime
+        return dt
+
     def __random_position(self, offset):
-        return (random.randint(offset, self.WIDTH - offset), random.randint(offset, self.HEIGHT - offset))
+        return (random.randint(offset, BOARD_WIDTH - offset), random.randint(offset, BOARD_HEIGHT - offset))
 
     #TODO: What the actual fuck? Have to simplify this!
     def __resolve_collisions(self):
@@ -94,14 +95,14 @@ class Model:
             while blob_b is not None:
                 if blob_a.get().player_id != blob_b.get().player_id:
                     if blob_a.get().collides(blob_b.get()):
-                        if blob_a.get().get_weight()*0.85 > blob_b.get().get_weight():
+                        if blob_a.get().can_eat(blob_b.get()):
                             blob_a.get().add_weight(blob_b.get().get_weight())
                             tmp = blob_b.get_next()
                             self.blobs.delete(blob_b)
                             blob_b.get().remove_from_family()
                             blob_b = tmp
 
-                        elif blob_b.get().get_weight() * 0.85 > blob_a.get().get_weight():
+                        elif blob_b.get().can_eat(blob_a.get()):
                             blob_b.get().add_weight(blob_a.get().get_weight())
                             tmp = blob_a.get_next()
                             self.blobs.delete(blob_a)
@@ -143,7 +144,9 @@ class Model:
 
             for blob in self.blobs:
                 if bullet_blob.get().collides(blob.get()):
-                    blob.get().add_weight(bullet_blob.get().get_weight())
+                    blob.get().push(bullet_blob.get())
+                    blob.get().add_weight(BULLET_EAT_RATIO*bullet_blob.get().get_weight())
+
                     tmp = bullet_blob.get_next()
                     self.bullet_blobs.delete(bullet_blob)
                     bullet_blob = tmp
@@ -154,16 +157,21 @@ class Model:
                     if isinstance(pellet.get(), LargePellet) and pellet.get().touches(bullet_blob.get()):
                         pellet.get().push(bullet_blob.get())
 
-                bullet_blob = bullet_blob.get_next()
+                        tmp = bullet_blob.get_next()
+                        self.bullet_blobs.delete(bullet_blob)
+                        bullet_blob = tmp
+                        break
+                else:
+                    bullet_blob = bullet_blob.get_next()
 
 
-    # dont generate on active cell
+    # TODO: dont generate on active cell
     def __generate_pellet(self):
         weight = random.randint(1, 5)
         pellet = Pellet(self.__random_position(10), weight)
         self.pellets.append(pellet)
 
-    # dont generate on active cell
+    # TODO: dont generate on active cell
     def __generate_large_pellet(self):
         pellet = LargePellet(self, self.__random_position(50))
         self.pellets.append(pellet)

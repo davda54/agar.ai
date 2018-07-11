@@ -21,7 +21,7 @@ class StupidHungryAIController(AbstractController):
                     closest = (item.get_position(), distance)
 
         if closest is None:
-            position = self.manipulator.get_blob_family_positions_and_weights()[0][0]
+            position = self.manipulator.get_largest_blob().get_position()
             middle = vector.divide(self.manipulator.get_board_size(), 2)
             self.manipulator.set_velocity(vector.substract(middle, position))
         else:

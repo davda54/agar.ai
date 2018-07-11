@@ -1,10 +1,9 @@
 from abstract_bonus_item import AbstractBonusItem
+from parameters import *
 
 class Pellet(AbstractBonusItem):
-    RADIUS = 5
-
     def __init__(self, position, weight):
-        super().__init__(position, self.RADIUS)
+        super().__init__(position, SMALL_PELLET_RADIUS)
         self.weight = weight
         self.proxy = PelletProxy(self)
 

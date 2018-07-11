@@ -1,11 +1,10 @@
 from abstract_blob import AbstractBlob
+from parameters import *
 
 
 class BulletBlob(AbstractBlob):
-    INIT_WEIGHT = 14
-
     def __init__(self, model, position, player_id, force):
-        super().__init__(model, position, player_id, self.INIT_WEIGHT, force)
+        super().__init__(model, position, player_id, BULLET_WEIGHT, force)
         self.proxy = BulletBlobProxy(self)
 
     def get_proxy(self):
