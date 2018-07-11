@@ -2,6 +2,7 @@ import vector
 from abstract_controller import AbstractController
 from blob import BlobProxy
 from bullet_blob import BulletBlobProxy
+from large_pellet import LargePelletProxy
 from parameters import *
 from pellet import PelletProxy
 
@@ -20,7 +21,7 @@ class CowardHungryAIController(AbstractController):
         for item in others:
             distance = vector.squared_distance(blob.get_position(), item.get_position())
 
-            if isinstance(item, PelletProxy):
+            if isinstance(item, PelletProxy) or isinstance(item, LargePelletProxy):
                 value = item.get_bonus_weight()**2 / distance
                 run_away = False
             elif isinstance(item, BlobProxy) or isinstance(item, BulletBlobProxy):

@@ -13,7 +13,8 @@ class AbstractView:
     def __init__(self, screen, model):
         self.screen = screen
         self.model = model
-        self.font = pygame.font.SysFont('Consolas', 24)
+        self.font = pygame.font.SysFont('Consolas Bold', 32)
+        self.id_to_col = {}
 
     def render(self):
         #self.screen.lock()
@@ -45,13 +46,19 @@ class AbstractView:
             self._draw_circle(pellet.get_position(), pellet.get_radius(), VIEW_SMALL_PELLET_COLOR)
 
     def _draw_weight(self, blob):
-        self._draw_centered_text(str(blob.get_weight()), blob.get_position())
+        if blob.is_main_blob():
+            col = (255,255,255)
+        else:
+            col = self._get_unique_color(blob.get_player_id())
+            col = col + pygame.Color(160,160,160,255)
 
-    def _draw_centered_text(self, text, position):
-        textsurface = self.font.render(text, False, (255, 255, 255))
+        self._draw_centered_text(str(blob.get_weight()), blob.get_position(), col)
+
+    def _draw_centered_text(self, text, pos, col):
+        textsurface = self.font.render(text, ANTIALIASING, col)
 
         size = vector.divide(self.font.size(text), 2)
-        mapped_pos = vector.substract(self._map_coord_to_screen(position), size)
+        mapped_pos = vector.substract(self._map_coord_to_screen(pos), size)
 
         x = int(mapped_pos[0] + 1 + 0.5)
         y = int(mapped_pos[1] + 1 + 0.5)
@@ -66,7 +73,7 @@ class AbstractView:
         y = int(mapped_pos[1] + 0.5)
         r = int(r*self._get_resize_ratio() + 0.5)
 
-        pygame.gfxdraw.aacircle(self.screen, x, y, r, col)
+        if ANTIALIASING: pygame.gfxdraw.aacircle(self.screen, x, y, r, col)
         pygame.gfxdraw.filled_circle(self.screen, x, y, r, col)
 
     # draw rectangle edge in the board coordinates onto the screen coordinates
@@ -95,8 +102,12 @@ class AbstractView:
 
     # uses golden angle to return the most distant hues for different consecutive ns
     def _get_unique_color(self, n):
+        if n in self.id_to_col:
+            return self.id_to_col[n]
+
         hue = n*137.5077640500378546463487 #phi
 
         color = pygame.Color(0,0,0,0)
-        color.hsva = (hue % 360.0, 100, 100, 100)
+        color.hsva = (hue % 360.0, 100, 100, 90)
+        self.id_to_col[n] = color
         return color

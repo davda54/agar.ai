@@ -71,6 +71,9 @@ class Blob(AbstractBlob):
     def get_proxy(self):
         return self.proxy
 
+    def is_main_blob(self):
+        return self.blob_family.main_blob is self
+
 # read-only wrapper around Blob
 class BlobProxy():
     def __init__(self, blob):

@@ -23,7 +23,8 @@ class GameboardView(AbstractView):
             self.resize_offset = ((screen_size[0] - board_size[0]*self.resize_ratio) * 0.5, 0)
 
     def _draw_weight(self, blob):
-        self._draw_centered_text(str(blob.get_weight()), vector.add(blob.get_position(), (0, -2*blob.get_radius())))
+        if blob.is_main_blob():
+            self._draw_centered_text(str(blob.get_weight()), vector.add(blob.get_position(), (0, -2*blob.get_radius())), (255,255,255))
 
     def _get_resize_ratio(self):
         return self.resize_ratio

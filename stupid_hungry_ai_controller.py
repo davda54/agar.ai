@@ -2,6 +2,7 @@ import vector
 from abstract_controller import AbstractController
 
 # AI that hunts the closest thing
+from large_pellet import LargePelletProxy
 from pellet import PelletProxy
 
 
@@ -15,7 +16,7 @@ class StupidHungryAIController(AbstractController):
         closest = None
 
         for item in others:
-            if isinstance(item, PelletProxy):
+            if isinstance(item, PelletProxy) or isinstance(item, LargePelletProxy):
                 distance = vector.squared_distance(main_blob.get_position(), item.get_position())
                 if closest is None or distance < closest[1]:
                     closest = (item.get_position(), distance)
