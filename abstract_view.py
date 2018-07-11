@@ -3,6 +3,7 @@ from pygame import gfxdraw
 
 import vector
 from abstract_blob import AbstractBlob
+from blob import Blob
 from large_pellet import LargePellet
 from parameters import *
 from pellet import Pellet
@@ -12,9 +13,10 @@ class AbstractView:
     def __init__(self, screen, model):
         self.screen = screen
         self.model = model
+        self.font = pygame.font.SysFont('Consolas', 24)
 
     def render(self):
-        self.screen.lock()
+        #self.screen.lock()
 
         self.screen.fill(VIEW_BACKGROUND_COLOR)
         self._draw_rect((0,0), self.model.get_board_size(), VIEW_BORDER_COLOR)
@@ -23,17 +25,38 @@ class AbstractView:
             if isinstance(item, AbstractBlob): self._draw_blob(item)
             elif isinstance(item, Pellet) or isinstance(item, LargePellet): self._draw_pellet(item)
 
-        self.screen.unlock()
+        #self.screen.unlock()
 
     def _draw_blob(self, blob):
+        if not self._fits_on_screen(blob): return
+
         color = self._get_unique_color(blob.get_player_id())
         self._draw_circle(blob.get_position(), blob.get_radius(), color)
 
+        if isinstance(blob, Blob): self._draw_weight(blob)
+
+
     def _draw_pellet(self, pellet):
+        if not self._fits_on_screen(pellet): return
+
         if isinstance(pellet, LargePellet):
             self._draw_circle(pellet.get_position(), pellet.get_radius(), VIEW_LARGE_PELLET_COLOR)
         else:
             self._draw_circle(pellet.get_position(), pellet.get_radius(), VIEW_SMALL_PELLET_COLOR)
+
+    def _draw_weight(self, blob):
+        self._draw_centered_text(str(blob.get_weight()), blob.get_position())
+
+    def _draw_centered_text(self, text, position):
+        textsurface = self.font.render(text, False, (255, 255, 255))
+
+        size = vector.divide(self.font.size(text), 2)
+        mapped_pos = vector.substract(self._map_coord_to_screen(position), size)
+
+        x = int(mapped_pos[0] + 1 + 0.5)
+        y = int(mapped_pos[1] + 1 + 0.5)
+
+        self.screen.blit(textsurface, (x,y))
 
     # draw circle in the board coordinates onto the screen coordinates
     def _draw_circle(self, pos, r, col):

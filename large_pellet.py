@@ -5,7 +5,7 @@ from parameters import *
 class LargePellet(AbstractMovingItem):
 
     def __init__(self, model, position):
-        super().__init__(model, position, LARGE_PELLET_RADIUS, LARGE_PELLET_SPEED, (0,0))
+        super().__init__(model, position, LARGE_PELLET_RADIUS, (0,0))
         self.proxy = LargePelletProxy(self)
 
     def affect(self, blob):

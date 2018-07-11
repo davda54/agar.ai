@@ -4,12 +4,12 @@ from parameters import *
 
 
 class AbstractMovingItem(AbstractItem):
-    def __init__(self, model, position, radius, speed, force):
+    def __init__(self, model, position, radius, force):
         super().__init__(position, radius)
 
         self.model = model
         self.force = force
-        self.speed = speed
+        self.speed = self.__get_speed_from_radius(radius)
 
     def update(self, dt, global_velocity=(0,0)):
         velocity = vector.add(global_velocity, vector.multiply(self.force, dt))
@@ -41,3 +41,10 @@ class AbstractMovingItem(AbstractItem):
 
     def add_force(self, force):
         self.force = vector.add(self.force, force)
+
+    def set_radius(self, radius):
+        self.radius = radius
+        self.speed = self.__get_speed_from_radius(self.radius)
+
+    def __get_speed_from_radius(self, radius):
+        return BASE_SPEED * (radius ** -0.4)

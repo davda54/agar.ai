@@ -145,7 +145,7 @@ class Model:
             for blob in self.blobs:
                 if bullet_blob.get().collides(blob.get()):
                     blob.get().push(bullet_blob.get())
-                    blob.get().add_weight(BULLET_EAT_RATIO*bullet_blob.get().get_weight())
+                    blob.get().add_weight(int(BULLET_EAT_RATIO*bullet_blob.get().get_weight() + 0.5))
 
                     tmp = bullet_blob.get_next()
                     self.bullet_blobs.delete(bullet_blob)

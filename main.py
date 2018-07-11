@@ -11,6 +11,7 @@ from stupid_hungry_ai_controller import StupidHungryAIController
 
 def run():
     pygame.init()
+    pygame.font.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     model = Model()

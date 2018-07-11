@@ -30,7 +30,7 @@ class PlayerView(AbstractView):
         return self.resize_offset
 
     def __set_resize_ratio(self):
-        self.resize_ratio = self.player_radius/max(20, 7*math.pow(self.center_blob_family.get_total_cell_radius(), 0.4))
+        self.resize_ratio = self.player_radius/max(8, 3*math.pow(self.center_blob_family.get_total_cell_radius(), 0.4))
 
     def __set_resize_offset(self):
         screen_center = vector.divide(self.screen.get_size(), 2)
@@ -38,8 +38,8 @@ class PlayerView(AbstractView):
         self.resize_offset = vector.substract(screen_center, scale_position)
 
     def _fits_on_screen(self, item):
-        right, bottom = self._map_coord_to_screen(vector.add(item.get_position(), (item.get_radius(), item.get_radius())))
-        left, top = self._map_coord_to_screen(vector.substract(item.get_position(), (item.get_radius(), item.get_radius())))
+        right, bottom = self._map_coord_to_screen(vector.substract(item.get_position(), (item.get_radius(), item.get_radius())))
+        left, top = self._map_coord_to_screen(vector.add(item.get_position(), (item.get_radius(), item.get_radius())))
         screen_size = self.screen.get_size()
 
-        return left >= 0 and top >= 0 and right >= screen_size[0] and bottom >= screen_size[1]
+        return left >= 0 and top >= 0 and right <= screen_size[0] and bottom <= screen_size[1]
