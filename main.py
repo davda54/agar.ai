@@ -75,7 +75,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run agar.ai with custom AI')
     parser.add_argument('--display', action='store_true', help='display the first controller from the first person view')
     parser.add_argument('--play', action='store_true', help='play for one blob manually')
-    parser.add_argument('controllers', metavar='N', type=num_controller, nargs='+', help='list of pairs "N,C" where C is controller class name and N is number of these controllers to instantiate')
+    parser.add_argument('controllers', metavar='Num,Ctrl', type=num_controller, nargs='+', help='list of pairs "N,C" where C is controller class name and N is number of these controllers to instantiate')
 
     args = parser.parse_args()
 
