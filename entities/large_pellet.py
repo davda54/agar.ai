@@ -1,8 +1,9 @@
+from entities.abstract_bonus_item import AbstractBonusItem
 from entities.abstract_moving_item import AbstractMovingItem
 from parameters import *
 
 
-class LargePellet(AbstractMovingItem):
+class LargePellet(AbstractMovingItem, AbstractBonusItem):
 
     def __init__(self, model, position):
         super().__init__(model, position, LARGE_PELLET_RADIUS, (0,0))
