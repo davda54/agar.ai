@@ -5,7 +5,7 @@ from abstract_controller import AbstractController
 
 
 # controls a blob family according to a mouse movemnt
-class MouseController(AbstractController):
+class mouse_controller(AbstractController):
 
     def __init__(self, view_size, player_radius, model):
         self.view_center = vector.divide(view_size, 2)

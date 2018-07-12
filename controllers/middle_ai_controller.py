@@ -2,9 +2,11 @@ import vector
 from abstract_controller import AbstractController
 
 # AI that just goes to the middle
-class MiddleAIController(AbstractController):
+class middle_ai_controller(AbstractController):
     def update(self):
-        position = self.manipulator.get_blob_family_positions_and_weights()[0][0]
+        if not self.manipulator.is_alive(): return
+
+        position = self.manipulator.get_largest_blob().get_position()
         middle = vector.divide(self.manipulator.get_board_size(), 2)
 
         self.manipulator.set_velocity(vector.substract(middle, position))

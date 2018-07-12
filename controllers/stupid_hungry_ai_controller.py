@@ -1,12 +1,11 @@
 import vector
 from abstract_controller import AbstractController
 
-# AI that hunts the closest thing
 from large_pellet import LargePelletProxy
 from pellet import PelletProxy
 
-
-class StupidHungryAIController(AbstractController):
+class stupid_hungry_ai_controller(AbstractController):
+    # AI that hunts the closest thing
     def update(self):
         if not self.manipulator.is_alive(): return
 

@@ -8,7 +8,7 @@ from pellet import PelletProxy
 
 
 # AI that hunts the closest thing
-class CowardHungryAIController(AbstractController):
+class coward_hungry_ai_controller(AbstractController):
     def update(self):
         if not self.manipulator.is_alive(): return
 
