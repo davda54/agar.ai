@@ -1,14 +1,40 @@
 # agar.ai
 
-## Call Examples
+Clone of famous multiplayer game https://agar.io/ that supports third-party AI controllers and can be easily used for reinforcement learning experiments.
 
-`10,coward_hungry_ai_controller`
+## Usage
 
-`--display 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller`
+### Play
 
-`--play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller`
+To play a game with your mouse, start the program with tag `--play` and then list the controllers used by opponents, for example: `python main.py --play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller`
 
-## Packages Used
+A left click on your mouse splits the blobs, a right click shoots a pellet from you main blob and the movement controls direction of motion.
+
+### Create New Controller
+
+Your new controller should be a class with the same name as the name of its file and should be placed in the 'controllers' folder. The class should implement `abstract_controller`, should have parameterless constructor and parameterless method `update()`. When correctly mentioned in command-line arguments, it will be automatically registered and provided with an instance of `manipulator` class in `self.manipulator`. The `update()` function is automatically called each frame, inside you should use (only) `self.manipulator` to do gather information about the environment and control your blobs.
+
+### Command Line Arguments
+
+`main.py [-h] [--display] [--play] N,C [N,C ...]`
+
+#### Positional Arguments:
+- `N,C`         list of pairs "N,C" where C is controller class name and N is
+              number of these controllers to instantiate
+
+#### Optional Arguments:
+- `-h`, `--help`  show this help message and exit
+- `--display`   display the first controller from the first person view
+- `--play`      play for one blob manually
+
+#### Call Examples
+```
+10,coward_hungry_ai_controller
+--display 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller
+--play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller
+```
+
+### Packages
 - pygame
 
 ## Reference on Parameter Settings
