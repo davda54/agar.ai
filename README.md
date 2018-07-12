@@ -55,3 +55,4 @@ https://gamefaqs.gamespot.com/webonly/163063-agario/faqs/73510
 - team play
 - add comments
 - create an interface for reinforcement learning
+- add leaderboard to GameboardView
