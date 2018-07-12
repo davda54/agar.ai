@@ -1,6 +1,6 @@
 # agar.ai
 
-Clone of famous multiplayer game https://agar.io/ that supports third-party AI controllers and can be easily used for reinforcement learning experiments.
+Clone of famous multiplayer game https://agar.io/ in python 3.6 that supports third-party AI controllers and can be easily used for reinforcement learning experiments.
 
 ## Usage
 
@@ -29,9 +29,9 @@ Your new controller should be a class with the same name as the name of its file
 
 #### Call Examples
 ```
-10,coward_hungry_ai_controller
---display 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller
---play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller
+python main.py 10,coward_hungry_ai_controller
+python main.py --display 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller
+python main.py --play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller
 ```
 
 ### Packages
