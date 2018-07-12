@@ -70,99 +70,95 @@ class Model:
     def __random_position(self, offset):
         return (random.randint(offset, BOARD_WIDTH - offset), random.randint(offset, BOARD_HEIGHT - offset))
 
-    #TODO: What the actual fuck? Have to simplify this!
     def __resolve_collisions(self):
-        blob_a = self.blobs.get_first_iterator()
-        while blob_a is not None:
+        blob_iter = self.blobs.get_first_iterator()
+        while blob_iter is not None:
 
-            pellet = self.pellets.get_first_iterator()
-            while pellet is not None:
-                if blob_a.get().collides(pellet.get()):
-                    pellet.get().affect(blob_a.get())
+            self.__resolve_collisions_blob_pellets(blob_iter.get())
 
-                    if isinstance(pellet.get(), LargePellet): self.__generate_large_pellet()
-                    else: self.__generate_pellet()
+            if self.__resolve_collisions_blob_other_blobs(blob_iter):
+                tmp = blob_iter.get_next()
+                self.blobs.delete(blob_iter)
+                blob_iter.get().remove_from_family()
+                blob_iter = tmp
+                continue
 
-                    tmp = pellet.get_next()
-                    self.pellets.delete(pellet)
-                    pellet = tmp
-
-                else:
-                    pellet = pellet.get_next()
-
-            blob_b = blob_a.get_next()
-            while blob_b is not None:
-                if blob_a.get().player_id != blob_b.get().player_id:
-                    if blob_a.get().collides(blob_b.get()):
-                        if blob_a.get().can_eat(blob_b.get()):
-                            blob_a.get().add_weight(blob_b.get().get_weight())
-                            tmp = blob_b.get_next()
-                            self.blobs.delete(blob_b)
-                            blob_b.get().remove_from_family()
-                            blob_b = tmp
-
-                        elif blob_b.get().can_eat(blob_a.get()):
-                            blob_b.get().add_weight(blob_a.get().get_weight())
-                            tmp = blob_a.get_next()
-                            self.blobs.delete(blob_a)
-                            blob_a.get().remove_from_family()
-                            blob_a = tmp
-                            break
-                        else:
-                            blob_b = blob_b.get_next()
-                    else:
-                        blob_b = blob_b.get_next()
-
-                else:
-                    if blob_a.get().get_blob_family().should_stay_divided():
-                        if blob_a.get().touches(blob_b.get()):
-                            blob_a.get().repel_from_each_other(blob_b.get())
-                        blob_b = blob_b.get_next()
-
-                    elif blob_a.get().collides(blob_b.get()):
-                        if blob_a.get().get_weight() >= blob_b.get().get_weight():
-                            blob_a.get().add_weight(blob_b.get().get_weight())
-                            tmp = blob_b.get_next()
-                            self.blobs.delete(blob_b)
-                            blob_b.get().remove_from_family()
-                            blob_b = tmp
-                        else:
-                            blob_b.get().add_weight(blob_a.get().get_weight())
-                            tmp = blob_a.get_next()
-                            self.blobs.delete(blob_a)
-                            blob_a.get().remove_from_family()
-                            blob_a = tmp
-                            break
-                    else:
-                        blob_b = blob_b.get_next()
-
-            blob_a = blob_a.get_next()
+            blob_iter = blob_iter.get_next()
 
         bullet_blob = self.bullet_blobs.get_first_iterator()
         while bullet_blob is not None:
 
-            for blob in self.blobs:
-                if bullet_blob.get().collides(blob.get()):
-                    blob.get().push(bullet_blob.get(), BULLET_BLOB_STRENGTH)
-                    blob.get().add_weight(int(BULLET_EAT_RATIO*bullet_blob.get().get_weight() + 0.5))
-
-                    tmp = bullet_blob.get_next()
-                    self.bullet_blobs.delete(bullet_blob)
-                    bullet_blob = tmp
-                    break
+            if self.__resolve_collisions_bullet_blobs(bullet_blob.get()) or self.__resolve_collisions_bullet_pellets(bullet_blob.get()):
+                tmp = bullet_blob.get_next()
+                self.bullet_blobs.delete(bullet_blob)
+                bullet_blob = tmp
             else:
+                bullet_blob = bullet_blob.get_next()
 
-                for pellet in self.pellets:
-                    if isinstance(pellet.get(), LargePellet) and pellet.get().touches(bullet_blob.get()):
-                        pellet.get().push(bullet_blob.get(), BULLET_PELLET_STRENGTH)
+    def __resolve_collisions_blob_pellets(self, blob):
+        pellet = self.pellets.get_first_iterator()
+        while pellet is not None:
+            if blob.collides(pellet.get()):
+                pellet.get().affect(blob)
 
-                        tmp = bullet_blob.get_next()
-                        self.bullet_blobs.delete(bullet_blob)
-                        bullet_blob = tmp
-                        break
+                if isinstance(pellet.get(), LargePellet):
+                    self.__generate_large_pellet()
                 else:
-                    bullet_blob = bullet_blob.get_next()
+                    self.__generate_pellet()
 
+                tmp = pellet.get_next()
+                self.pellets.delete(pellet)
+                pellet = tmp
+
+            else:
+                pellet = pellet.get_next()
+
+    def __resolve_collisions_blob_other_blobs(self, blob_iter_1):
+        # returns true if blob_iter_1.get() should be deleted
+
+        blob_1 = blob_iter_1.get()
+        blob_iter_2 = blob_iter_1.get_next()
+
+        can_merge = blob_1.get_blob_family().should_stay_divided()
+
+        while blob_iter_2 is not None:
+
+            blob_2 = blob_iter_2.get()
+            same_family = blob_1.get_blob_family() is blob_2.get_blob_family()
+
+            if blob_1.collides(blob_2):
+                if blob_1.can_eat(blob_2) or (same_family and can_merge and blob_1.get_weight() >= blob_2.get_weight()):
+                    blob_1.add_weight(blob_2.get_weight())
+                    tmp = blob_iter_2.get_next()
+                    self.blobs.delete(blob_iter_2)
+                    blob_2.remove_from_family()
+                    blob_iter_2 = tmp
+                    continue
+
+                elif blob_2.can_eat(blob_1) or (
+                        same_family and can_merge and blob_1.get_weight() <= blob_2.get_weight()):
+                    blob_2.add_weight(blob_1.get_weight())
+                    return True
+
+            if same_family and not can_merge and blob_1.touches(blob_2):
+                blob_1.repel_from_each_other(blob_2)
+
+            blob_iter_2 = blob_iter_2.get_next()
+
+    def __resolve_collisions_bullet_blobs(self, bullet_blob):
+        for blob in self.blobs:
+            if bullet_blob.collides(blob.get()):
+                blob.get().push(bullet_blob, BULLET_BLOB_STRENGTH)
+                blob.get().add_weight(int(BULLET_EAT_RATIO * bullet_blob.get().get_weight() + 0.5))
+                return True
+        return False
+
+    def __resolve_collisions_bullet_pellets(self, bullet_blob):
+        for pellet in self.pellets:
+            if isinstance(pellet.get(), LargePellet) and pellet.get().collides(bullet_blob):
+                pellet.get().push(bullet_blob, BULLET_PELLET_STRENGTH)
+                return True
+        return False
 
     def __generate_pellet(self):
         weight = random.randint(1, 5)

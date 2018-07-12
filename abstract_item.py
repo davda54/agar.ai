@@ -12,8 +12,7 @@ class AbstractItem:
 
     def collides(self, other):
         distance = vector.squared_norm(vector.substract(self.position, other.position))
-        if distance - (self.radius + (1 - 1)*other.radius)**2 < 0: return True
-        else: return distance - ((1 - 1)*self.radius + other.radius)**2 < 0
+        return distance - max(self.radius, other.radius)**2 < 0
 
     def touches(self, other):
         distance = vector.squared_norm(vector.substract(self.position, other.position))
