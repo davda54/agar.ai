@@ -119,7 +119,7 @@ class Model:
         blob_1 = blob_iter_1.get()
         blob_iter_2 = blob_iter_1.get_next()
 
-        can_merge = blob_1.get_blob_family().should_stay_divided()
+        can_merge = not blob_1.get_blob_family().should_stay_divided()
 
         while blob_iter_2 is not None:
 
@@ -127,7 +127,7 @@ class Model:
             same_family = blob_1.get_blob_family() is blob_2.get_blob_family()
 
             if blob_1.collides(blob_2):
-                if blob_1.can_eat(blob_2) or (same_family and can_merge and blob_1.get_weight() >= blob_2.get_weight()):
+                if (not same_family and blob_1.can_eat(blob_2)) or (same_family and can_merge and blob_1.get_weight() >= blob_2.get_weight()):
                     blob_1.add_weight(blob_2.get_weight())
                     tmp = blob_iter_2.get_next()
                     self.blobs.delete(blob_iter_2)
@@ -135,8 +135,7 @@ class Model:
                     blob_iter_2 = tmp
                     continue
 
-                elif blob_2.can_eat(blob_1) or (
-                        same_family and can_merge and blob_1.get_weight() <= blob_2.get_weight()):
+                elif (not same_family and blob_2.can_eat(blob_1)) or (same_family and can_merge and blob_1.get_weight() <= blob_2.get_weight()):
                     blob_2.add_weight(blob_1.get_weight())
                     return True
 
@@ -149,7 +148,7 @@ class Model:
         for blob in self.blobs:
             if bullet_blob.collides(blob.get()):
                 blob.get().push(bullet_blob, BULLET_BLOB_STRENGTH)
-                blob.get().add_weight(int(BULLET_EAT_RATIO * bullet_blob.get().get_weight() + 0.5))
+                blob.get().add_weight(BULLET_EAT_RATIO * bullet_blob.get_weight())
                 return True
         return False
 
