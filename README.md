@@ -21,7 +21,7 @@ Your new controller should be a class with the same name as its file and should 
 `main.py [-h] [--display] [--play] N,C [N,C ...]`
 
 ##### Positional Arguments:
-- `N,C`         list of pairs "N,C" where C is controller class name and N is
+- `N,C`         list of pairs where C is controller class name and N is the
               number of these controllers to instantiate
 
 ##### Optional Arguments:
