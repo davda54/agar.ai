@@ -2,6 +2,8 @@
 
 Clone of famous multiplayer game https://agar.io/ in python 3.6 that supports third-party AI controllers and can be easily used for reinforcement learning experiments.
 
+![Alt text](/imt/screenshot.png)
+
 ## Usage
 
 ### Play
