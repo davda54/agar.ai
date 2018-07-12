@@ -1,8 +1,8 @@
 import random
 
 import vector
-from abstract_blob import AbstractBlob
-from bullet_blob import BulletBlob
+from entities.abstract_blob import AbstractBlob
+from entities.bullet_blob import BulletBlob
 from parameters import *
 
 

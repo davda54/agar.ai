@@ -1,8 +1,8 @@
 import vector
-from abstract_controller import AbstractController
+from controllers.abstract_controller import AbstractController
 
-from large_pellet import LargePelletProxy
-from pellet import PelletProxy
+from entities.large_pellet import LargePelletProxy
+from entities.pellet import PelletProxy
 
 class stupid_hungry_ai_controller(AbstractController):
     # AI that hunts the closest thing

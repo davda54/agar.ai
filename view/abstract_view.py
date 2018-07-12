@@ -2,11 +2,11 @@ import pygame
 from pygame import gfxdraw
 
 import vector
-from abstract_blob import AbstractBlob
-from blob import Blob
-from large_pellet import LargePellet
+from entities.abstract_blob import AbstractBlob
+from entities.blob import Blob
+from entities.large_pellet import LargePellet
+from entities.pellet import Pellet
 from parameters import *
-from pellet import Pellet
 
 
 class AbstractView:

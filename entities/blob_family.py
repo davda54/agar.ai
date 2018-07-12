@@ -2,8 +2,8 @@ import math
 from functools import reduce
 
 import vector
-from blob import Blob
-from bullet_blob import BulletBlob
+from entities.blob import Blob
+from entities.bullet_blob import BulletBlob
 from parameters import *
 
 

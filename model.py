@@ -1,13 +1,13 @@
 import random
 import time
 
-from blob import Blob
-from blob_family import BlobFamily
 from double_linked_list import DoubleLinkedList
-from large_pellet import LargePellet
+from entities.blob import Blob
+from entities.blob_family import BlobFamily
+from entities.large_pellet import LargePellet
+from entities.pellet import Pellet
 from manipulator import Manipulator
 from parameters import *
-from pellet import Pellet
 
 
 # implements the game logic and moves the environment

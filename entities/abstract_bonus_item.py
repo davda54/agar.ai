@@ -1,4 +1,4 @@
-from abstract_item import AbstractItem
+from entities.abstract_item import AbstractItem
 
 # items that affect a blob when consumed
 class AbstractBonusItem(AbstractItem):

@@ -1,5 +1,5 @@
 import vector
-from abstract_view import AbstractView
+from view.abstract_view import AbstractView
 
 
 # renders the environment

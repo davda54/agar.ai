@@ -6,10 +6,10 @@ import pygame
 from pygame.locals import *
 
 from controllers.mouse_controller import mouse_controller
-from gameboard_view import GameboardView
 from model import Model
 from parameters import *
-from player_view import PlayerView
+from view.gameboard_view import GameboardView
+from view.player_view import PlayerView
 
 
 #TODO: support play without graphics

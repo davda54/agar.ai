@@ -1,8 +1,8 @@
 import math
 
 import vector
-from abstract_view import AbstractView
-from gameboard_view import GameboardView
+from view.abstract_view import AbstractView
+from view.gameboard_view import GameboardView
 
 
 class PlayerView(AbstractView):

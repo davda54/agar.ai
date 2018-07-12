@@ -1,4 +1,4 @@
-from abstract_moving_item import AbstractMovingItem
+from entities.abstract_moving_item import AbstractMovingItem
 from parameters import *
 
 

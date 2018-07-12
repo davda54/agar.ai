@@ -1,5 +1,5 @@
 import vector
-from abstract_controller import AbstractController
+from controllers.abstract_controller import AbstractController
 
 # AI that just goes to the middle
 class middle_ai_controller(AbstractController):

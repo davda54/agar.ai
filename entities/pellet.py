@@ -1,4 +1,4 @@
-from abstract_bonus_item import AbstractBonusItem
+from entities.abstract_bonus_item import AbstractBonusItem
 from parameters import *
 
 class Pellet(AbstractBonusItem):

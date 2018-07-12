@@ -1,7 +1,7 @@
 import pygame
 
 import vector
-from abstract_controller import AbstractController
+from controllers.abstract_controller import AbstractController
 
 
 # controls a blob family according to a mouse movemnt

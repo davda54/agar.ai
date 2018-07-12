@@ -1,5 +1,5 @@
 import vector
-from abstract_item import AbstractItem
+from entities.abstract_item import AbstractItem
 from parameters import *
 
 

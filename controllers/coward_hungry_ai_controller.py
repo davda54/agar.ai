@@ -1,10 +1,10 @@
 import vector
-from abstract_controller import AbstractController
-from blob import BlobProxy
-from bullet_blob import BulletBlobProxy
-from large_pellet import LargePelletProxy
+from controllers.abstract_controller import AbstractController
+from entities.blob import BlobProxy
+from entities.bullet_blob import BulletBlobProxy
+from entities.large_pellet import LargePelletProxy
+from entities.pellet import PelletProxy
 from parameters import *
-from pellet import PelletProxy
 
 
 # AI that hunts the closest thing

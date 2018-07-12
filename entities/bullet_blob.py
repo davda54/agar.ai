@@ -1,4 +1,4 @@
-from abstract_blob import AbstractBlob
+from entities.abstract_blob import AbstractBlob
 from parameters import *
 
 

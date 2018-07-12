@@ -1,6 +1,6 @@
 import math
 
-from abstract_moving_item import AbstractMovingItem
+from entities.abstract_moving_item import AbstractMovingItem
 
 
 class AbstractBlob(AbstractMovingItem):
