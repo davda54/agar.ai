@@ -12,7 +12,7 @@ A left click on your mouse splits the blobs, a right click shoots a pellet from 
 
 ### Create New Controller
 
-Your new controller should be a class with the same name as the name of its file and should be placed in the 'controllers' folder. The class should implement `abstract_controller`, should have parameterless constructor and parameterless method `update()`. When correctly mentioned in command-line arguments, it will be automatically registered and provided with an instance of `manipulator` class in `self.manipulator`. The `update()` function is automatically called each frame, inside you should use (only) `self.manipulator` to do gather information about the environment and control your blobs.
+Your new controller should be a class with the same name as its file and should be placed inside the 'controllers' folder. The class should implement `abstract_controller` and should have parameterless constructor and parameterless method `update()`. When correctly mentioned in command-line arguments, the class will be automatically registered and provided with an instance of `manipulator` class in `self.manipulator`. The `update()` function is automatically called each frame, inside you should use (only) `self.manipulator` to gather information about the environment and control your blobs.
 
 ### Command Line Arguments
 
