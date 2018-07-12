@@ -8,7 +8,7 @@ Clone of famous multiplayer game https://agar.io/ in python 3.6 that supports th
 
 To play a game with your mouse, start the program with tag `--play` and then list the controllers used by opponents, for example: `python main.py --play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controller 1,middle_ai_controller`
 
-A left click on your mouse splits the blobs, a right click shoots a pellet from you main blob and the movement controls direction of motion.
+A left click on your mouse splits the blobs, a right click shoots a pellet from the main blob.
 
 ### Create New Controller
 
