@@ -4,6 +4,7 @@ A clone of the famous multiplayer game https://agar.io/ in python 3.6 that suppo
 
 ![Alt text](/img/screenshot.png)
 
+&nbsp;
 ## Usage
 
 #### Play
@@ -39,7 +40,7 @@ python main.py --play 3,coward_hungry_ai_controller 8,stupid_hungry_ai_controlle
 #### Packages
 - pygame
 
-
+&nbsp;
 ## Rules
 
 TODO
@@ -47,6 +48,7 @@ TODO
 #### Reference on Parameter Settings
 https://gamefaqs.gamespot.com/webonly/163063-agario/faqs/73510
 
+&nbsp;
 ## TODO
 
 - [ ] support fast play without graphical interface
