@@ -1,4 +1,4 @@
-# agar.ai
+# agar.ai (WIP)
 
 A clone of the famous multiplayer game https://agar.io/ in python 3.6 that supports third-party AI controllers and can be easily used for reinforcement learning experiments.
 
@@ -49,10 +49,10 @@ https://gamefaqs.gamespot.com/webonly/163063-agario/faqs/73510
 
 ## TODO
 
-- support fast play without graphical interface
-- play a batch of games and output the statistics
-- make a reasonable game mode (2 minute play with resurrection?) that can be better used for reinforcement learning
-- team play
-- add comments
-- create an interface for reinforcement learning
-- add leaderboard to GameboardView
+- [ ] support fast play without graphical interface
+- [ ] play a batch of games and output the statistics
+- [ ] make a reasonable game mode (2 minute play with resurrection?) that can be better used for reinforcement learning
+- [ ] team play
+- [ ] add comments
+- [ ] create an interface for reinforcement learning
+- [ ] add leaderboard to GameboardView
